@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Autenticação", description = "Endpoints de login e logout")
+@Tag(name = "01 - Autenticação", description = "Endpoints de login e logout")
 public class AuthController {
 
     private final UsuarioRepository repository;
@@ -45,7 +45,6 @@ public class AuthController {
             throw new RuntimeException("Credenciais inválidas");
         }
 
-//        return this.jwtService.generateToken(request.username());
         String token = jwtService.generateToken(request.getUsername());
         return new LoginResponse(
                 token,

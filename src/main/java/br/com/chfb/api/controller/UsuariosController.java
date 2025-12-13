@@ -13,26 +13,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
-@Tag(name = "Usuários", description = "CRUD de usuários do sistema")
+@Tag(name = "02 - Usuários", description = "CRUD de usuários do sistema")
 public class UsuariosController {
 
     private final UsuarioRepository repository;
     private final PasswordEncoder encoder;
 
-    @Operation(summary = "Lista todos os usuários")
+    @Operation(
+            summary = "Listar",
+            description = "Lista todos os usuários"
+    )
     @GetMapping
     public List<Usuario> listar() {
         return this.repository.findAll();
     }
 
-    @Operation(summary = "Cria um novo usuário")
+    @Operation(
+            summary = "Cadastrar",
+            description = "Cadastrar um novo usuário"
+    )
     @PostMapping
-    public Usuario criar(@RequestBody Usuario usuario) {
+    public Usuario cadastrar(@RequestBody Usuario usuario) {
         usuario.setPassword(encoder.encode(usuario.getPassword()));
         return this.repository.save(usuario);
     }
 
-    @Operation(summary = "Atualiza um usuário existente")
+    @Operation(
+            summary = "Atualizar",
+            description = "Atualiza um usuário existente"
+    )
     @PutMapping("/{id}")
     public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
         Usuario existente = this.repository.findById(id).orElseThrow();
@@ -43,7 +52,10 @@ public class UsuariosController {
         return this.repository.save(existente);
     }
 
-    @Operation(summary = "Remove um usuário")
+    @Operation(
+            summary = "Remover",
+            description = "Remove um usuário"
+    )
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         this.repository.deleteById(id);
