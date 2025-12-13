@@ -22,6 +22,8 @@ public class DefaultHeadersFilter implements Filter {
         res.setHeader("X-Content-Type-Options", "nosniff");
         res.setHeader("X-Frame-Options", "DENY");
         res.setHeader("X-XSS-Protection", "0");
+        res.setHeader("default-src", "none");
+        res.setHeader("Referrer-Policy", "no-referrer");
 
         // API REST
         res.setHeader("Cache-Control", "no-store");
