@@ -35,10 +35,8 @@ public class OpenApiConfig {
 
     @Bean
     public OpenApiCustomizer sortOperations() {
-        return openApi -> openApi.getPaths().values().forEach(pathItem -> {
-            pathItem.readOperations().sort(
-                    Comparator.comparing(Operation::getOperationId)
-            );
-        });
+        return openApi -> openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().sort(
+                Comparator.comparing(Operation::getOperationId)
+        ));
     }
 }
