@@ -1,0 +1,37 @@
+package br.com.chfb.api.security;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
+
+@Service
+public class JwtService {
+
+    private static final String SECRET =
+            "229e7184ffaf9a2d31c6bd94f118d99348ea210a744679dd5f3881c64ac99753";
+
+    private static final long EXPIRATION = 1000 * 60 * 60 * 5; // 5h
+
+    private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
+
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(key)
+                .compact();
+    }
+
+    public String getUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+}
