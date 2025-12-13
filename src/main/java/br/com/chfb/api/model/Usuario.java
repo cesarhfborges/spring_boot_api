@@ -1,5 +1,7 @@
 package br.com.chfb.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,11 +30,13 @@ public class Usuario implements UserDetails {
     private String username;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(nullable = false)
     private Boolean enabled = true;
 
+    @JsonIgnore
     @Column(name = "account_confirmed", nullable = false)
     private Boolean accountConfirmed = true;
 
@@ -46,6 +50,7 @@ public class Usuario implements UserDetails {
         }
     }
 
+    @JsonIgnore
     @Override
     @Schema(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,21 +62,25 @@ public class Usuario implements UserDetails {
         return username;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return Boolean.TRUE.equals(this.accountConfirmed);
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return Boolean.TRUE.equals(this.enabled);

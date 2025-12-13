@@ -34,6 +34,12 @@ public class JwtAuthenticationFilter extends GenericFilter {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
                 String token = authHeader.substring(7).trim();
+
+                if (!jwtService.isTokenValid(token)) {
+                    throw new BadCredentialsException("Invalid token");
+                }
+
+
                 String username = jwtService.getUsername(token);
 
                 UsernamePasswordAuthenticationToken authentication =
