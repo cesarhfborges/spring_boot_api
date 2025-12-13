@@ -5,6 +5,9 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Service
@@ -33,5 +36,11 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public LocalDateTime getExpirationDateTime() {
+        return Instant.ofEpochMilli(System.currentTimeMillis() + EXPIRATION)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }
