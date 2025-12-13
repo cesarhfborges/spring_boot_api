@@ -2,7 +2,9 @@ package br.com.chfb.api.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,25 +17,47 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends GenericFilter {
 
     private final JwtService jwtService;
+    private final JwtAuthenticationEntryPoint entryPoint;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(
+            ServletRequest request,
+            ServletResponse response,
+            FilterChain chain
+    ) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
+
         String authHeader = req.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            String username = jwtService.getUsername(token);
+        try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(username, null, null);
+                String token = authHeader.substring(7).trim();
+                String username = jwtService.getUsername(token);
 
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-            SecurityContextHolder.getContext().setAuthentication(auth);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                username, null, null
+                        );
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(req)
+                );
+
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
+            }
+
+            chain.doFilter(request, response);
+
+        } catch (Exception ex) {
+            SecurityContextHolder.clearContext();
+            entryPoint.commence(
+                    req,
+                    (HttpServletResponse) response,
+                    new BadCredentialsException("Unauthorized", ex)
+            );
         }
-
-        chain.doFilter(request, response);
     }
 }

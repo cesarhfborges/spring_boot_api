@@ -1,25 +1,47 @@
 spring:
   application:
     name: api
+    version: 1.0.0
   datasource:
     url: jdbc:mariadb://localhost:3306/api_spring
     username: root
     password: 91344356
     driver-class-name: org.mariadb.jdbc.Driver
-#    driverClassName: com.mysql.jdbc.Driver
+    hikari:
+      pool-name: HikariPool-1
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 300000        # 5 minutos
+      max-lifetime: 1800000       # 30 minutos
+      connection-timeout: 30000   # 30 segundos
+      auto-commit: true
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        show_sql: false
+        connection:
+          isolation: 2
+server:
+  servlet:
+    #    context-path: /api
+    encoding:
+      charset: UTF-8
+  port: 8080
+  address: 0.0.0.0
 
 api:
   security:
     token:
-      secret: YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=
+#      secret: YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=
+      secret: ${JWT_SECRET:YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=}
       expiration-time: 3600000
 
 springdoc:
   swagger-ui:
     defaultModelsExpandDepth: -1
+    path: /swagger-ui
