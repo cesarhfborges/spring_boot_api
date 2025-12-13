@@ -1,5 +1,6 @@
 package br.com.chfb.api.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,24 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private Boolean enabled = true;
+
+    @Column(name = "account_confirmed", nullable = false)
+    private Boolean accountConfirmed = true;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.enabled == null) {
+            this.enabled = true;
+        }
+        if (this.accountConfirmed == null) {
+            this.accountConfirmed = true;
+        }
+    }
+
     @Override
+    @Schema(hidden = true)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
@@ -46,7 +64,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return Boolean.TRUE.equals(this.accountConfirmed);
     }
 
     @Override
@@ -56,6 +74,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return Boolean.TRUE.equals(this.enabled);
     }
 }

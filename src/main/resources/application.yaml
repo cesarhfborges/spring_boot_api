@@ -9,7 +9,7 @@ spring:
 #    driverClassName: com.mysql.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -19,3 +19,7 @@ api:
     token:
       secret: YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=
       expiration-time: 3600000
+
+springdoc:
+  swagger-ui:
+    defaultModelsExpandDepth: -1
