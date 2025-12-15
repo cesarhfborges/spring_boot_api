@@ -6,6 +6,6 @@ public record UsuarioPerfilResponse(
         Long id,
         String username,
         Set<String> roles,
-        PerfilResponse profile
+        PerfilResponse perfil
 ) {
 }
