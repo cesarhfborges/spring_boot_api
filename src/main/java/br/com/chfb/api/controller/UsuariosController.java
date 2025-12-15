@@ -5,15 +5,18 @@ import br.com.chfb.api.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "02 - Usuários", description = "CRUD de usuários do sistema")
+@RequiredArgsConstructor
+@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/usuarios")
-@RequiredArgsConstructor
-@Tag(name = "02 - Usuários", description = "CRUD de usuários do sistema")
 public class UsuariosController {
 
     private final UsuarioRepository repository;
@@ -33,6 +36,7 @@ public class UsuariosController {
             description = "Cadastrar um novo usuário"
     )
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Usuario cadastrar(@RequestBody Usuario usuario) {
         usuario.setPassword(encoder.encode(usuario.getPassword()));
         return this.repository.save(usuario);
