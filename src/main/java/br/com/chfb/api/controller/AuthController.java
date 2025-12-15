@@ -2,17 +2,18 @@ package br.com.chfb.api.controller;
 
 import br.com.chfb.api.dto.req.LoginRequest;
 import br.com.chfb.api.dto.resp.LoginResponse;
-import br.com.chfb.api.dto.resp.UsuarioPerfilResponse;
 import br.com.chfb.api.repository.UsuarioRepository;
 import br.com.chfb.api.security.JwtService;
-import br.com.chfb.api.service.AuthProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,7 +24,6 @@ public class AuthController {
     private final UsuarioRepository repository;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
-    private final AuthProfileService authProfileService;
 
     @Operation(
             summary = "Login",
@@ -60,14 +60,5 @@ public class AuthController {
     @PostMapping("/logout")
     public void logout() {
         // Stateless: logout é responsabilidade do cliente
-    }
-
-    @Operation(
-            summary = "Perfil",
-            description = "perfil do usuario logado"
-    )
-    @GetMapping("/perfil")
-    public UsuarioPerfilResponse perfil() {
-        return authProfileService.getPerfilUsuarioLogado();
     }
 }

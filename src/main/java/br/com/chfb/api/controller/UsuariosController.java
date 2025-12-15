@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "02 - Usuários", description = "CRUD de usuários do sistema")
+@Tag(name = "05 - Usuários", description = "CRUD de usuários do sistema")
 @RequiredArgsConstructor
 @EnableMethodSecurity
 @RestController
