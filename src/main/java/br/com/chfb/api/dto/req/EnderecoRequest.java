@@ -7,7 +7,6 @@ public record EnderecoRequest(
         String bairro,
         String cidade,
         String uf,
-        String cep,
-        Long funcionarioId
+        String cep
 ) {
 }

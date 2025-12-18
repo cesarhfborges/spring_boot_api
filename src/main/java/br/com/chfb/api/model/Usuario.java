@@ -52,8 +52,8 @@ public class Usuario implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-//    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Perfil perfil;
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Funcionario funcionario;
 
     @PrePersist
     public void prePersist() {

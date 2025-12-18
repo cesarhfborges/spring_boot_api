@@ -19,8 +19,8 @@ public class RoleSeed implements Seed {
         List<String> roles = List.of(
                 "ROLE_ADMIN",
                 "ROLE_GESTOR",
-                "ROLE_VOTANTE",
-                "ROLE_AUDITOR"
+                "ROLE_AUDITOR",
+                "ROLE_VOTANTE"
         );
 
         for (String roleName : roles) {
