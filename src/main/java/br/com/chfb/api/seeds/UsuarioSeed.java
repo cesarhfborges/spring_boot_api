@@ -32,7 +32,6 @@ public class UsuarioSeed implements Seed {
             return;
         }
 
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
         Role gestorRole = roleRepository.findByName("ROLE_GESTOR").orElseThrow();
         Role auditorRole = roleRepository.findByName("ROLE_AUDITOR").orElseThrow();
         Role votanteRole = roleRepository.findByName("ROLE_VOTANTE").orElseThrow();
@@ -41,14 +40,7 @@ public class UsuarioSeed implements Seed {
         // 1️⃣ ADMIN (ID = 1)
         // ======================================================
         usuarioRepository.save(
-                criarUsuarioFixo(
-                        "admin",
-                        "admin123",
-                        "Administrador",
-                        "Sistema",
-                        "admin@sistema.com",
-                        adminRole
-                )
+                criarUsuarioAdmin()
         );
 
         // ======================================================
@@ -72,24 +64,19 @@ public class UsuarioSeed implements Seed {
     // ======================================================
     // USUÁRIO FIXO (ADMIN)
     // ======================================================
-    private Usuario criarUsuarioFixo(
-            String username,
-            String senha,
-            String nome,
-            String sobrenome,
-            String email,
-            Role role
-    ) {
+    private Usuario criarUsuarioAdmin() {
+
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
 
         Usuario usuario = Usuario.builder()
-                .username(username)
-                .password(passwordEncoder.encode(senha))
-                .roles(Set.of(role))
+                .username("admin")
+                .password(passwordEncoder.encode("admin123"))
+                .roles(Set.of(adminRole))
                 .enabled(true)
                 .accountConfirmed(true)
                 .build();
 
-        Funcionario funcionario = criarFuncionario(usuario, nome, sobrenome, email);
+        Funcionario funcionario = criarFuncionario(usuario, "Administrador", "Sistema", "admin@sistema.com");
         usuario.setFuncionario(funcionario);
 
         return usuario;
@@ -100,7 +87,7 @@ public class UsuarioSeed implements Seed {
     // ======================================================
     private Usuario criarUsuarioAleatorio(Role role) {
 
-        String username = faker.name().username() + faker.number().randomDigit();
+        String username = faker.internet().username() + faker.number().randomDigit();
         String nome = faker.name().firstName();
         String sobrenome = faker.name().lastName();
         String email = faker.internet().emailAddress();
