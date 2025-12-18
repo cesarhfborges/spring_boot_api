@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 
-@Tag(name = "03 - Endereços", description = "CRUD de endereços do sistema")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/funcionarios/{funcionarioId}/enderecos")
 @SecurityRequirement(name = "bearerAuth")
+@Tag(name = "04 - Endereços", description = "CRUD de endereços do sistema")
 public class EnderecoController {
 
     private final EnderecoService enderecoService;

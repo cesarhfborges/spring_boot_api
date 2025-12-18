@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 
-@Tag(name = "02 - Funcionario", description = "CRUD de funcionarios do sistema")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/funcionarios")
 @SecurityRequirement(name = "bearerAuth")
+@Tag(name = "03 - Funcionario", description = "CRUD de funcionarios do sistema")
 public class FuncionariosController {
 
     private final FuncionarioService service;
