@@ -1,6 +1,7 @@
 package br.com.chfb.api.seeds;
 
-import br.com.chfb.api.model.*;
+import br.com.chfb.api.model.Role;
+import br.com.chfb.api.model.Usuario;
 import br.com.chfb.api.repository.RoleRepository;
 import br.com.chfb.api.repository.UsuarioRepository;
 import br.com.chfb.api.seeds.contract.Seed;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Component
@@ -71,34 +71,34 @@ public class UsuarioSeed implements Seed {
                 .roles(Set.of(role))
                 .build();
 
-        Perfil profile = Perfil.builder()
-                .nome(nome)
-                .sobrenome(sobrenome)
-                .dataNascimento(LocalDate.of(1990, 1, 1))
-                .cpf(null)
-                .rg(null)
-                .usuario(usuario)
-                .build();
-
-        Endereco endereco = Endereco.builder()
-                .logradouro("Rua Exemplo")
-                .numero("123")
-                .bairro("Centro")
-                .cidade("São Paulo")
-//                .uf("SP")
-                .cep("01001000")
-                .perfil(profile)
-                .build();
-
-        Contato contato = Contato.builder()
-                .tipo(TipoContato.EMAIL)
-                .valor(email)
-                .perfil(profile)
-                .build();
-
-        profile.setEnderecos(Set.of(endereco));
-        profile.setContatos(Set.of(contato));
-        usuario.setPerfil(profile);
+//        Perfil profile = Perfil.builder()
+//                .nome(nome)
+//                .sobrenome(sobrenome)
+//                .dataNascimento(LocalDate.of(1990, 1, 1))
+//                .cpf(null)
+//                .rg(null)
+//                .usuario(usuario)
+//                .build();
+//
+//        Endereco endereco = Endereco.builder()
+//                .logradouro("Rua Exemplo")
+//                .numero("123")
+//                .bairro("Centro")
+//                .cidade("São Paulo")
+////                .uf("SP")
+//                .cep("01001000")
+//                .perfil(profile)
+//                .build();
+//
+//        Contato contato = Contato.builder()
+//                .tipo(TipoContato.EMAIL)
+//                .valor(email)
+//                .perfil(profile)
+//                .build();
+//
+//        profile.setEnderecos(Set.of(endereco));
+//        profile.setContatos(Set.of(contato));
+//        usuario.setPerfil(profile);
 
         return usuario;
     }

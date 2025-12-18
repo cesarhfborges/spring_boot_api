@@ -41,6 +41,6 @@ public class Endereco {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "perfil_id", nullable = false)
-    private Perfil perfil;
+    @JoinColumn(name = "funcionario_id", nullable = false)
+    private Funcionario funcionario;
 }

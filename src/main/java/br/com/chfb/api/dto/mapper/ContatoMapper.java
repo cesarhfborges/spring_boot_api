@@ -3,7 +3,7 @@ package br.com.chfb.api.dto.mapper;
 import br.com.chfb.api.dto.req.ContatoRequest;
 import br.com.chfb.api.dto.resp.ContatoResponse;
 import br.com.chfb.api.model.Contato;
-import br.com.chfb.api.model.Perfil;
+import br.com.chfb.api.model.Funcionario;
 import org.mapstruct.*;
 
 @Mapper(
@@ -15,14 +15,14 @@ public interface ContatoMapper {
     ContatoResponse toDTO(Contato contato);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "perfil", ignore = true)
+    @Mapping(target = "funcionario", ignore = true)
     Contato toEntity(ContatoRequest request);
 
     @AfterMapping
-    default void associarPerfil(
+    default void associarFuncionario(
             @MappingTarget Contato contato,
-            @Context Perfil perfil
+            @Context Funcionario funcionario
     ) {
-        contato.setPerfil(perfil);
+        contato.setFuncionario(funcionario);
     }
 }

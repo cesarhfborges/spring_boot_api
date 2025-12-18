@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "perfis")
+@Table(name = "funcionarios")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Perfil {
+public class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,9 +44,9 @@ public class Perfil {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "perfil", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Endereco> enderecos;
 
-    @OneToMany(mappedBy = "perfil", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Contato> contatos;
 }

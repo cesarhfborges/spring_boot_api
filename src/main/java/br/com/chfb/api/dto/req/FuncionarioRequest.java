@@ -3,7 +3,7 @@ package br.com.chfb.api.dto.req;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record PerfilRequest(
+public record FuncionarioRequest(
         String nome,
         String sobrenome,
         LocalDate dataNascimento,
