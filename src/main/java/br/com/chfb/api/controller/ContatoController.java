@@ -3,9 +3,9 @@ package br.com.chfb.api.controller;
 import br.com.chfb.api.dto.req.ContatoRequest;
 import br.com.chfb.api.dto.resp.ContatoResponse;
 import br.com.chfb.api.service.ContatoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -13,9 +13,9 @@ import java.util.Set;
 
 @Tag(name = "04 - Contatos", description = "CRUD de contatos do sistema")
 @RequiredArgsConstructor
-@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/funcionarios/{funcionarioId}/contatos")
+@SecurityRequirement(name = "bearerAuth")
 public class ContatoController {
 
     private final ContatoService contatoService;

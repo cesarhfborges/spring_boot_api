@@ -1,67 +1,76 @@
 package br.com.chfb.api.security;
 
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends GenericFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint entryPoint;
 
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain
-    ) throws IOException, ServletException {
-
-        HttpServletRequest req = (HttpServletRequest) request;
-
-        String authHeader = req.getHeader("Authorization");
-
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
         try {
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String authHeader = request.getHeader("Authorization");
 
-                String token = authHeader.substring(7).trim();
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-                if (!jwtService.isTokenValid(token)) {
-                    throw new BadCredentialsException("Invalid token");
-                }
+            String token = authHeader.substring(7);
+            String username = jwtService.getUsername(token);
 
+            if (username != null &&
+                    SecurityContextHolder.getContext().getAuthentication() == null &&
+                    jwtService.isTokenValid(token)) {
 
-                String username = jwtService.getUsername(token);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                username, null, null
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
                         );
 
                 authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(req)
+                        new WebAuthenticationDetailsSource()
+                                .buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
             }
 
-            chain.doFilter(request, response);
+            filterChain.doFilter(request, response);
 
         } catch (Exception ex) {
             SecurityContextHolder.clearContext();
             entryPoint.commence(
-                    req,
-                    (HttpServletResponse) response,
+                    request,
+                    response,
                     new BadCredentialsException("Unauthorized", ex)
             );
         }

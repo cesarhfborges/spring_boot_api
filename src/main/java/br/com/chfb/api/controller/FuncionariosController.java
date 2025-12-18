@@ -4,9 +4,9 @@ import br.com.chfb.api.dto.req.FuncionarioRequest;
 import br.com.chfb.api.dto.resp.FuncionarioResponse;
 import br.com.chfb.api.service.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -14,9 +14,9 @@ import java.util.Set;
 
 @Tag(name = "02 - Funcionario", description = "CRUD de funcionarios do sistema")
 @RequiredArgsConstructor
-@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/funcionarios")
+@SecurityRequirement(name = "bearerAuth")
 public class FuncionariosController {
 
     private final FuncionarioService service;
@@ -27,8 +27,8 @@ public class FuncionariosController {
     )
     @GetMapping
     public Set<FuncionarioResponse> listar(
-            @RequestParam(required = false) String sort,
-            @RequestParam(required = false) String direction
+            @RequestParam(required = false, defaultValue = "id", name = "sort") String sort,
+            @RequestParam(required = false, defaultValue = "ASC", name = "direction") String direction
     ) {
         Set<String> camposPermitidos = Set.of("id", "nome", "sobrenome", "cpf");
 

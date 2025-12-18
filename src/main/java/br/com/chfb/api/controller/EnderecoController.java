@@ -3,9 +3,9 @@ package br.com.chfb.api.controller;
 import br.com.chfb.api.dto.req.EnderecoRequest;
 import br.com.chfb.api.dto.resp.EnderecoResponse;
 import br.com.chfb.api.service.EnderecoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -13,9 +13,9 @@ import java.util.Set;
 
 @Tag(name = "03 - Endereços", description = "CRUD de endereços do sistema")
 @RequiredArgsConstructor
-@EnableMethodSecurity
 @RestController
 @RequestMapping("/api/funcionarios/{funcionarioId}/enderecos")
+@SecurityRequirement(name = "bearerAuth")
 public class EnderecoController {
 
     private final EnderecoService enderecoService;

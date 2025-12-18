@@ -19,20 +19,13 @@ import java.util.Date;
 public class JwtService {
 
     private final JwtProperties properties;
-
     private SecretKey secretKey;
 
     @PostConstruct
     void init() {
         byte[] keyBytes = Base64.getDecoder()
                 .decode(properties.getSecret());
-
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(properties.getSecret());
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(String username) {
@@ -42,25 +35,17 @@ public class JwtService {
                 .subject(username)
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + properties.getExpirationTime()))
-                .signWith(getSigningKey())
+                .signWith(secretKey)
                 .compact();
     }
 
     public String getUsername(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
-    }
-
-    public LocalDateTime getExpirationDateTime() {
-        return Instant
-                .ofEpochMilli(
-                        System.currentTimeMillis() + properties.getExpirationTime()
-                ).atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
     }
 
     public boolean isTokenValid(String token) {
@@ -73,5 +58,13 @@ public class JwtService {
         } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
+    }
+
+    public LocalDateTime getExpirationDateTime() {
+        return Instant
+                .ofEpochMilli(
+                        System.currentTimeMillis() + properties.getExpirationTime()
+                ).atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -45,8 +46,8 @@ public class Funcionario {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Endereco> enderecos;
+    private Set<Endereco> enderecos = new HashSet<>();
 
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Contato> contatos;
+    private Set<Contato> contatos = new HashSet<>();
 }
