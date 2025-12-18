@@ -35,35 +35,18 @@ public class UsuarioSeed implements Seed {
         Role gestorRole = roleRepository.findByName("ROLE_GESTOR").orElseThrow();
         Role auditorRole = roleRepository.findByName("ROLE_AUDITOR").orElseThrow();
         Role votanteRole = roleRepository.findByName("ROLE_VOTANTE").orElseThrow();
-
-        // ======================================================
-        // 1️⃣ ADMIN (ID = 1)
-        // ======================================================
         usuarioRepository.save(
                 criarUsuarioAdmin()
         );
-
-        // ======================================================
-        // 2️⃣ GESTOR (ID = 2)
-        // ======================================================
         usuarioRepository.save(criarUsuarioAleatorio(gestorRole));
-
-        // ======================================================
-        // 3️⃣ AUDITOR (ID = 3)
-        // ======================================================
         usuarioRepository.save(criarUsuarioAleatorio(auditorRole));
 
-        // ======================================================
-        // 4️⃣–20️⃣ VOTANTES
-        // ======================================================
         for (int i = 0; i < 17; i++) {
             usuarioRepository.save(criarUsuarioAleatorio(votanteRole));
         }
     }
 
-    // ======================================================
-    // USUÁRIO FIXO (ADMIN)
-    // ======================================================
+
     private Usuario criarUsuarioAdmin() {
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
@@ -82,9 +65,6 @@ public class UsuarioSeed implements Seed {
         return usuario;
     }
 
-    // ======================================================
-    // USUÁRIO ALEATÓRIO (FAKER)
-    // ======================================================
     private Usuario criarUsuarioAleatorio(Role role) {
 
         String username = faker.internet().username() + faker.number().randomDigit();
@@ -106,9 +86,6 @@ public class UsuarioSeed implements Seed {
         return usuario;
     }
 
-    // ======================================================
-    // FUNCIONÁRIO + ENDEREÇOS + CONTATOS
-    // ======================================================
     private Funcionario criarFuncionario(
             Usuario usuario,
             String nome,
@@ -129,9 +106,6 @@ public class UsuarioSeed implements Seed {
                 .contatos(new HashSet<>())
                 .build();
 
-        // ----------------------
-        // ENDEREÇOS (5)
-        // ----------------------
         for (int i = 0; i < 5; i++) {
             funcionario.getEnderecos().add(
                     Endereco.builder()
@@ -146,9 +120,6 @@ public class UsuarioSeed implements Seed {
             );
         }
 
-        // ----------------------
-        // CONTATOS (5)
-        // ----------------------
         funcionario.getContatos().add(
                 Contato.builder()
                         .tipo(TipoContato.EMAIL)
