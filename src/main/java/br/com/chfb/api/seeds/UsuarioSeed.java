@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -136,11 +135,7 @@ public class UsuarioSeed implements Seed {
                 .cpf(faker.number().digits(11))
                 .rg(faker.number().digits(9))
                 .dataNascimento(
-                        faker.date()
-                                .birthday(18, 65)
-                                .toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
+                        faker.timeAndDate().birthday(18, 65)
                 )
                 .usuario(usuario)
                 .enderecos(new HashSet<>())
