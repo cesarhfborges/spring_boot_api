@@ -1,5 +1,6 @@
 package br.com.chfb.api.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,18 @@ public class SecurityConfig {
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .exceptionHandling(ex ->
-                        ex.authenticationEntryPoint(authenticationEntryPoint)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("""
+                                        {
+                                          "status": 403,
+                                          "message": "access denied"
+                                        }
+                                    """);
+                        })
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(

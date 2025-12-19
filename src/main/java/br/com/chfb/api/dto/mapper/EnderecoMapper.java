@@ -17,5 +17,6 @@ public interface EnderecoMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "funcionario", ignore = true)
+    @Mapping(target = "uf", expression = "java(UF.fromString(request.uf()))")
     Endereco toEntity(EnderecoRequest request);
 }

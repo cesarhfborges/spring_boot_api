@@ -1,35 +1,38 @@
 package br.com.chfb.api.exceptions;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleIllegalArgument(IllegalArgumentException ex) {
+        return Map.of(
+                "status", 400,
+                "message", ex.getMessage()
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleValidation(MethodArgumentNotValidException ex) {
 
-        Map<String, List<String>> errors = new HashMap<>();
-
-        ex.getBindingResult()
-                .getFieldErrors()
-                .forEach(error ->
-                        errors
-                                .computeIfAbsent(error.getField(), k -> new ArrayList<>())
-                                .add(error.getDefaultMessage())
-                );
+        var errors = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .toList();
 
         return Map.of(
-                "status", HttpStatus.BAD_REQUEST.value(),
+                "status", 400,
                 "errors", errors
         );
     }
