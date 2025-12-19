@@ -13,6 +13,7 @@ public record FuncionarioRequest(
         @NotBlank(message = "Sobrenome é obrigatório")
         String sobrenome,
 
+
         @NotNull(message = "Data de nascimento é obrigatória")
         @Past(message = "Data de nascimento deve estar no passado")
         LocalDate dataNascimento,
