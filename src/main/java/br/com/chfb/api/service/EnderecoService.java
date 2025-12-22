@@ -8,6 +8,7 @@ import br.com.chfb.api.model.Funcionario;
 import br.com.chfb.api.model.UF;
 import br.com.chfb.api.repository.EnderecoRepository;
 import br.com.chfb.api.repository.FuncionarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +92,14 @@ public class EnderecoService {
 
     @Transactional(readOnly = true)
     public EnderecoResponse buscarPorId(Long funcionarioId, Long id) {
-        Endereco endereco = enderecoRepository.findEnderecoByIdAndFuncionario_Id(id, funcionarioId);
+        Endereco endereco = enderecoRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Endereco não encontrado")
+        );
+        if (!endereco.getFuncionario().getId().equals(funcionarioId)) {
+            throw new EntityNotFoundException(
+                    "O endereço não pertence ao funcionário informado"
+            );
+        }
         return enderecoMapper.toDTO(endereco);
     }
 }

@@ -7,6 +7,7 @@ import br.com.chfb.api.model.Contato;
 import br.com.chfb.api.model.Funcionario;
 import br.com.chfb.api.repository.ContatoRepository;
 import br.com.chfb.api.repository.FuncionarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,7 +86,11 @@ public class ContatoService {
 
     @Transactional(readOnly = true)
     public ContatoResponse buscarPorId(Long funcionarioId, Long id) {
-        Contato contato = contatoRepository.findContatoByIdAndFuncionario_Id(id, funcionarioId);
+        Contato contato = contatoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Contato não encontrado"));
+
+        if (!contato.getFuncionario().getId().equals(funcionarioId)) {
+            throw new EntityNotFoundException("O contato não pertence ao funcionário informado");
+        }
         return contatoMapper.toDTO(contato);
     }
 }
