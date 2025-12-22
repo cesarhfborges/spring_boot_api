@@ -88,5 +88,11 @@ public class EnderecoService {
 
         enderecoRepository.delete(endereco);
     }
+
+    @Transactional(readOnly = true)
+    public EnderecoResponse buscarPorId(Long funcionarioId, Long id) {
+        Endereco endereco = enderecoRepository.findEnderecoByIdAndFuncionario_Id(id, funcionarioId);
+        return enderecoMapper.toDTO(endereco);
+    }
 }
 

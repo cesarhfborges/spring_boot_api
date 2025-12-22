@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/perfil")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "02 - Perfil")
+@Tag(name = "02 - Perfil", description = "atualização de perfil.")
 public class PerfilController {
 
     private final PerfilService perfilService;

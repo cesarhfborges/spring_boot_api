@@ -3,6 +3,7 @@ package br.com.chfb.api.controller;
 import br.com.chfb.api.dto.req.EnderecoRequest;
 import br.com.chfb.api.dto.resp.EnderecoResponse;
 import br.com.chfb.api.service.EnderecoService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,13 @@ public class EnderecoController {
 
     private final EnderecoService enderecoService;
 
+    @Operation(summary = "Listar")
     @GetMapping
     public Set<EnderecoResponse> listar(@PathVariable Long funcionarioId) {
         return enderecoService.listarTodos(funcionarioId);
     }
 
+    @Operation(summary = "Cadastrar")
     @PostMapping
     public EnderecoResponse criar(
             @PathVariable Long funcionarioId,
@@ -33,6 +36,16 @@ public class EnderecoController {
         return enderecoService.criar(funcionarioId, request);
     }
 
+    @Operation(summary = "Mostrar")
+    @GetMapping("/{id}")
+    public EnderecoResponse mostrar(
+            @PathVariable Long funcionarioId,
+            @PathVariable Long id
+    ) {
+        return enderecoService.buscarPorId(funcionarioId, id);
+    }
+
+    @Operation(summary = "Atualizar")
     @PutMapping("/{id}")
     public EnderecoResponse atualizar(
             @PathVariable Long funcionarioId,
@@ -42,6 +55,7 @@ public class EnderecoController {
         return enderecoService.atualizar(funcionarioId, id, request);
     }
 
+    @Operation(summary = "Remover")
     @DeleteMapping("/{id}")
     public void remover(
             @PathVariable Long funcionarioId,

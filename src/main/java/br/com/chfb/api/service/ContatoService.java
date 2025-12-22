@@ -82,5 +82,11 @@ public class ContatoService {
 
         contatoRepository.delete(contato);
     }
+
+    @Transactional(readOnly = true)
+    public ContatoResponse buscarPorId(Long funcionarioId, Long id) {
+        Contato contato = contatoRepository.findContatoByIdAndFuncionario_Id(id, funcionarioId);
+        return contatoMapper.toDTO(contato);
+    }
 }
 
