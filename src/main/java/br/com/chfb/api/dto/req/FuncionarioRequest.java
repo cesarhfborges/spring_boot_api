@@ -35,7 +35,7 @@ public record FuncionarioRequest(
     @AssertTrue(message = "Funcionário deve ter no mínimo 18 anos")
     public boolean isMaiorDeIdade() {
         if (dataNascimento == null) {
-            return true;
+            return false;
         }
         return Period.between(dataNascimento, LocalDate.now()).getYears() >= 18;
     }
