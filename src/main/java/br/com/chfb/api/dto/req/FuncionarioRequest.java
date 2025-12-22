@@ -1,10 +1,10 @@
 package br.com.chfb.api.dto.req;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Set;
 
 public record FuncionarioRequest(
         @NotBlank(message = "Nome é obrigatório")
@@ -12,7 +12,6 @@ public record FuncionarioRequest(
 
         @NotBlank(message = "Sobrenome é obrigatório")
         String sobrenome,
-
 
         @NotNull(message = "Data de nascimento é obrigatória")
         @Past(message = "Data de nascimento deve estar no passado")
@@ -30,12 +29,9 @@ public record FuncionarioRequest(
                 regexp = "\\d{7,20}",
                 message = "RG deve conter apenas números"
         )
-        String rg,
-
-        Set<EnderecoRequest> enderecos,
-
-        Set<ContatoRequest> contatos
+        String rg
 ) {
+    @JsonIgnore
     @AssertTrue(message = "Funcionário deve ter no mínimo 18 anos")
     public boolean isMaiorDeIdade() {
         if (dataNascimento == null) {
