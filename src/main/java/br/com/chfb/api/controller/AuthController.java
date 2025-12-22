@@ -29,7 +29,8 @@ public class AuthController {
 
     @Operation(
             summary = "Login",
-            description = "Autentica o usuário e retorna um JWT"
+            description = "Autentica o usuário e retorna um JWT",
+            security = @SecurityRequirement(name = "")
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Login realizado com sucesso"),
