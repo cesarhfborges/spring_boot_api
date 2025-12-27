@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -79,6 +80,23 @@ public class PautaService {
 
         Pauta pauta = buscarPorId(reuniaoId, pautaId);
         pautaRepository.delete(pauta);
+    }
+
+    public void validarPautaAbertaParaVotacao(Pauta pauta) {
+
+        if (pauta.getStatus() != StatusPauta.ABERTA) {
+            throw new IllegalStateException("A pauta não está aberta para votação");
+        }
+
+        LocalDateTime agora = LocalDateTime.now();
+
+        if (pauta.getDataHoraAbertura() != null && agora.isBefore(pauta.getDataHoraAbertura())) {
+            throw new IllegalStateException("A votação ainda não foi aberta");
+        }
+
+        if (pauta.getDataHoraEncerramento() != null && agora.isAfter(pauta.getDataHoraEncerramento())) {
+            throw new IllegalStateException("A votação já foi encerrada");
+        }
     }
 
 //    public List<Pauta> buscarTodos() {

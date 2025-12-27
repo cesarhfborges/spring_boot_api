@@ -111,4 +111,17 @@ public class BloqueioVotoPautaService {
             throw new EntityNotFoundException("Pauta não encontrada para a reunião informada");
         }
     }
+
+    @Transactional(readOnly = true)
+    public void validarFuncionarioPodeVotar(
+            Long pautaId,
+            Long funcionarioId
+    ) {
+        boolean bloqueado = repository
+                .existsByPautaIdAndFuncionarioIdAndAtivoTrue(pautaId, funcionarioId);
+
+        if (bloqueado) {
+            throw new IllegalStateException("Funcionário está bloqueado para votar nesta pauta");
+        }
+    }
 }

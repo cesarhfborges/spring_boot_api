@@ -16,4 +16,9 @@ public interface BloqueioVotoPautaRepository
     List<BloqueioVotoPauta> findAllByPautaId(Long pautaId);
 
     Optional<BloqueioVotoPauta> findByIdAndPautaId(Long id, Long pautaId);
+
+    boolean existsByPautaIdAndFuncionarioIdAndAtivoTrue(
+            Long pautaId,
+            Long funcionarioId
+    );
 }

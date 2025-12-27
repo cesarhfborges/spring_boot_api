@@ -38,7 +38,7 @@ public class OpenApiConfig {
 
             new Tag().name("09 - Opções").description("Configuração de opções de voto"),
 
-            new Tag().name("10 - Voto").description("Registro de votos"));
+            new Tag().name("10 - Votação").description("Registro de votos"));
 
     @Bean
     public OpenAPI customOpenAPI() {
