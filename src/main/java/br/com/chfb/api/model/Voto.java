@@ -31,6 +31,10 @@ public class Voto {
     @Column(nullable = false)
     private LocalDateTime dataHoraVoto;
 
-    @OneToMany(mappedBy = "voto", cascade = CascadeType.ALL)
-    private List<VotoOpcao> opcoesSelecionadas;
+    @OneToMany(
+            mappedBy = "voto",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ItemVotado> itensVotados;
 }

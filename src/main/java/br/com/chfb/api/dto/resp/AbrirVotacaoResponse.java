@@ -5,7 +5,7 @@ import br.com.chfb.api.model.TipoVoto;
 
 import java.time.LocalDateTime;
 
-public record PautaResponse(
+public record AbrirVotacaoResponse(
         Long id,
         String titulo,
         String descricao,

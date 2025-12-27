@@ -19,6 +19,7 @@ public interface VotoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "pauta", ignore = true)
     @Mapping(target = "funcionario", ignore = true)
-    @Mapping(target = "opcoesSelecionadas", ignore = true)
+    @Mapping(target = "dataHoraVoto", ignore = true)
+    @Mapping(target = "itensVotados", ignore = true)
     Voto toEntity(VotoRequest request);
 }

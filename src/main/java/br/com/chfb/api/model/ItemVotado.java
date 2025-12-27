@@ -8,10 +8,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(
-        name = "voto_opcoes",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"voto_id", "opcao_voto_id"})
+        name = "itens_votados",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"voto_id", "opcao_voto_id"}
+        )
 )
-public class VotoOpcao {
+public class ItemVotado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

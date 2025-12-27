@@ -1,7 +1,10 @@
 package br.com.chfb.api.controller;
 
+import br.com.chfb.api.dto.mapper.PautaMapper;
 import br.com.chfb.api.dto.mapper.VotoMapper;
+import br.com.chfb.api.dto.req.AbrirVotacaoRequest;
 import br.com.chfb.api.dto.req.VotoRequest;
+import br.com.chfb.api.dto.resp.PautaResponse;
 import br.com.chfb.api.dto.resp.VotoResponse;
 import br.com.chfb.api.model.Voto;
 import br.com.chfb.api.security.annotation.PodeVotar;
@@ -22,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class VotacaoController {
 
     private final VotoService service;
-    private final VotoMapper mapper;
+    private final VotoMapper votoMapper;
+    private final PautaMapper pautaMapper;
 
     @PostMapping
     @PodeVotar
@@ -36,18 +40,21 @@ public class VotacaoController {
         Voto voto = service.salvar(
                 reuniaoId,
                 pautaId,
-                mapper.toEntity(request)
+                votoMapper.toEntity(request),
+                request.votosComoLista(),
+                request.codigoVoto()
         );
-        return mapper.toDTO(voto);
+        return votoMapper.toDTO(voto);
     }
 
     @PostMapping("/abrir")
     @Operation(summary = "Abrir votação da pauta")
-    public void abrirVotacao(
+    public PautaResponse abrirVotacao(
             @PathVariable Long reuniaoId,
-            @PathVariable Long pautaId
+            @PathVariable Long pautaId,
+            @RequestBody @Valid AbrirVotacaoRequest request
     ) {
-        service.abrirVotacao(reuniaoId, pautaId);
+        return pautaMapper.toDTO(service.abrirVotacao(reuniaoId, pautaId, request));
     }
 
     @PostMapping("/encerrar")
@@ -57,5 +64,14 @@ public class VotacaoController {
             @PathVariable Long pautaId
     ) {
         service.encerrarVotacao(reuniaoId, pautaId);
+    }
+
+    @PostMapping("/cancelar")
+    @Operation(summary = "Encerrar votação da pauta")
+    public void cancelarVotacao(
+            @PathVariable Long reuniaoId,
+            @PathVariable Long pautaId
+    ) {
+        service.cancelarVotacao(reuniaoId, pautaId);
     }
 }

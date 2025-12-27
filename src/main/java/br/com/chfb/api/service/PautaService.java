@@ -3,6 +3,7 @@ package br.com.chfb.api.service;
 import br.com.chfb.api.model.Pauta;
 import br.com.chfb.api.model.Reuniao;
 import br.com.chfb.api.model.StatusPauta;
+import br.com.chfb.api.model.TipoVoto;
 import br.com.chfb.api.repository.PautaRepository;
 import br.com.chfb.api.repository.ReuniaoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,6 +37,10 @@ public class PautaService {
 
         if (pauta.getStatus() == null) {
             pauta.setStatus(StatusPauta.AGUARDANDO);
+        }
+
+        if (pauta.getTipoVoto() == TipoVoto.UNICO) {
+            pauta.setLimiteSelecoes(1);
         }
 
         return pautaRepository.save(pauta);

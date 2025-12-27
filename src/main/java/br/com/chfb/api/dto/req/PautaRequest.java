@@ -16,9 +16,8 @@ public record PautaRequest(
         TipoVoto tipoVoto,
 
         @PositiveOrZero(message = "Limite deve ser zero ou positivo")
-        Integer limiteSelecoes,
-
-        @NotNull(message = "Deve ser informado se é exigido codigo ou não.")
-        boolean exigeCodigoVoto
+        Integer limiteSelecoes
+//        @NotNull(message = "Deve ser informado se é exigido codigo ou não.")
+//        boolean exigeCodigoVoto
 ) {
 }
