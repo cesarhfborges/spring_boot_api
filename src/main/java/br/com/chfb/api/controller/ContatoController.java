@@ -21,7 +21,10 @@ public class ContatoController {
 
     private final ContatoService contatoService;
 
-    @Operation(summary = "Listar")
+    @Operation(
+            summary = "Listar",
+            description = "Listagem de contatos"
+    )
     @GetMapping
     public Set<ContatoResponse> listar(@PathVariable Long funcionarioId) {
         return contatoService.listarTodos(funcionarioId);

@@ -9,14 +9,36 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
+
+    private final List<Tag> tags = List.of(new Tag().name("01 - Autenticação").description("Endpoints de login e logout"),
+
+            new Tag().name("02 - Perfil").description("Atualização de perfil"),
+
+            new Tag().name("03 - Funcionario").description("CRUD de funcionarios do sistema"),
+
+            new Tag().name("04 - Endereços").description("CRUD de endereços do sistema"),
+
+            new Tag().name("05 - Contatos").description("CRUD de contatos do sistema"),
+
+            new Tag().name("06 - Reuniao").description("Gestão de reuniões"),
+
+            new Tag().name("07 - Pautas").description("Gestão de pautas da reunião"),
+
+            new Tag().name("08 - Bloqueio").description("Bloqueio de voto por pauta"),
+
+            new Tag().name("09 - Opções").description("Configuração de opções de voto"),
+
+            new Tag().name("10 - Voto").description("Registro de votos"));
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -58,7 +80,7 @@ public class OpenApiConfig {
                                 Authorization: Bearer {{token}}
                                 ```
                                 """)
-                )
+                ).tags(this.tags)
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
@@ -69,51 +91,90 @@ public class OpenApiConfig {
                 );
     }
 
+//    @Bean
+//    public OpenApiCustomizer sortPathsByTag() {
+//        return openApi -> {
+//
+//            if (openApi.getPaths() == null || openApi.getPaths().isEmpty()) {
+//                return;
+//            }
+//
+//            var sortedEntries = openApi.getPaths().entrySet()
+//                    .stream()
+//                    .sorted(Comparator.comparing(entry -> {
+//                        var pathItem = entry.getValue();
+//
+//                        if (pathItem.readOperations() != null && !pathItem.readOperations().isEmpty()) {
+//                            var operation = pathItem.readOperations().get(0);
+//                            if (operation.getTags() != null && !operation.getTags().isEmpty()) {
+//                                return operation.getTags().get(0);
+//                            }
+//                        }
+//                        return "ZZZ";
+//                    }))
+//                    .toList();
+//
+//            var sortedPaths = new io.swagger.v3.oas.models.Paths();
+//            sortedEntries.forEach(entry ->
+//                    sortedPaths.put(entry.getKey(), entry.getValue())
+//            );
+//
+//            openApi.setPaths(sortedPaths);
+//        };
+//    }
+
+//    @Bean
+//    public OpenApiCustomizer sortOperationsInsidePath() {
+//        return openApi -> openApi.getPaths().values().forEach(pathItem ->
+//                pathItem.readOperations().sort(
+//                        Comparator
+//                                .comparing(
+//                                        (Operation op) -> op.getTags() != null && !op.getTags().isEmpty()
+//                                                ? op.getTags().get(0)
+//                                                : "ZZZ"
+//                                )
+//                                .thenComparing(op -> op.getOperationId() != null ? op.getOperationId() : "")
+//                )
+//        );
+//    }
+
     @Bean
-    public OpenApiCustomizer sortPathsByTag() {
+    public OpenApiCustomizer sortByTagOrder() {
         return openApi -> {
 
             if (openApi.getPaths() == null || openApi.getPaths().isEmpty()) {
                 return;
             }
 
-            var sortedEntries = openApi.getPaths().entrySet()
+            /* =========================
+             * 1. Ordenar PATHS por número da TAG
+             * ========================= */
+            var sortedPaths = openApi.getPaths().entrySet()
                     .stream()
                     .sorted(Comparator.comparing(entry -> {
-                        var pathItem = entry.getValue();
-
-                        if (pathItem.readOperations() != null && !pathItem.readOperations().isEmpty()) {
-                            var operation = pathItem.readOperations().get(0);
-                            if (operation.getTags() != null && !operation.getTags().isEmpty()) {
-                                return operation.getTags().get(0);
-                            }
+                        var ops = entry.getValue().readOperations();
+                        if (ops != null && !ops.isEmpty()) {
+                            return extractTagOrder(ops.get(0));
                         }
-                        return "ZZZ";
-                    }))
-                    .toList();
-
-            var sortedPaths = new io.swagger.v3.oas.models.Paths();
-            sortedEntries.forEach(entry ->
-                    sortedPaths.put(entry.getKey(), entry.getValue())
-            );
+                        return Integer.MAX_VALUE;
+                    })).collect(io.swagger.v3.oas.models.Paths::new, (paths, entry) -> paths.put(entry.getKey(), entry.getValue()), io.swagger.v3.oas.models.Paths::putAll);
 
             openApi.setPaths(sortedPaths);
-        };
-    }
 
-    @Bean
-    public OpenApiCustomizer sortOperationsInsidePath() {
-        return openApi -> openApi.getPaths().values().forEach(pathItem ->
-                pathItem.readOperations().sort(
-                        Comparator
-                                .comparing(
-                                        (Operation op) -> op.getTags() != null && !op.getTags().isEmpty()
-                                                ? op.getTags().get(0)
-                                                : "ZZZ"
-                                )
-                                .thenComparing(op -> op.getOperationId() != null ? op.getOperationId() : "")
-                )
-        );
+            /* =========================
+             * 2. Ordenar TAGS globais (ESSENCIAL)
+             * ========================= */
+            if (openApi.getTags() != null) {
+                openApi.setTags(openApi.getTags().stream().sorted(Comparator.comparing(tag -> {
+                    try {
+                        String number = tag.getName().split("-")[0].trim();
+                        return Integer.parseInt(number);
+                    } catch (Exception e) {
+                        return Integer.MAX_VALUE;
+                    }
+                })).toList());
+            }
+        };
     }
 
 
@@ -168,10 +229,8 @@ public class OpenApiConfig {
             return Integer.MAX_VALUE;
         }
 
-        String tag = operation.getTags().get(0);
-
         try {
-            String number = tag.split("-")[0].trim();
+            String number = operation.getTags().get(0).split("-")[0].trim();
             return Integer.parseInt(number);
         } catch (Exception e) {
             return Integer.MAX_VALUE;
