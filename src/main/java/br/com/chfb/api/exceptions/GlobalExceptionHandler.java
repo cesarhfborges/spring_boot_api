@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleJsonParse(HttpMessageNotReadableException ex) {
         return Map.of(
                 "status", HttpStatus.BAD_REQUEST.value(),
-                "message", "Corpo da requisição inválido ou malformado"
+                "message", ex.getMessage()
         );
     }
 
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleGeneric(Exception ex) {
         return Map.of(
                 "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "message", "Erro interno no servidor"
+                "message", ex.getMessage()
         );
     }
 }
