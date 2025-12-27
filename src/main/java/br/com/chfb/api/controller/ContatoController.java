@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/funcionarios/{funcionarioId}/contatos")
-@RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "05 - Contatos", description = "CRUD de contatos do sistema")
 public class ContatoController {

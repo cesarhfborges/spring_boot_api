@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleIllegalArgument(IllegalArgumentException ex) {
         return Map.of(
-                "status", 400,
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "message", ex.getMessage()
         );
     }
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return Map.of(
-                "status", 400,
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "errors", errors
         );
     }
@@ -53,7 +54,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return Map.of(
-                "status", 400,
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "errors", errors
         );
     }
@@ -62,7 +63,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleJsonParse(HttpMessageNotReadableException ex) {
         return Map.of(
-                "status", 400,
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "message", "Corpo da requisição inválido ou malformado"
         );
     }
@@ -71,7 +72,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handleEntityNotFound(EntityNotFoundException ex) {
         return Map.of(
-                "status", 404,
+                "status", HttpStatus.NOT_FOUND.value(),
                 "message", ex.getMessage()
         );
     }
@@ -80,7 +81,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Map<String, Object> handleAccessDenied(AccessDeniedException ex) {
         return Map.of(
-                "status", 403,
+                "status", HttpStatus.FORBIDDEN.value(),
                 "message", "Acesso negado"
         );
     }
@@ -89,8 +90,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Map<String, Object> handleBadCredentials(BadCredentialsException ex) {
         return Map.of(
-                "status", 401,
+                "status", HttpStatus.UNAUTHORIZED.value(),
                 "message", "Credenciais inválidas"
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+
+        return Map.of(
+                "status", HttpStatus.CONFLICT.value(),
+                "message", "Já existe um item com esses dados."
         );
     }
 
@@ -98,7 +109,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, Object> handleGeneric(Exception ex) {
         return Map.of(
-                "status", 500,
+                "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "message", "Erro interno no servidor"
         );
     }

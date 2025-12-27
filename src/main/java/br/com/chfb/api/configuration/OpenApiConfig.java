@@ -25,6 +25,39 @@ public class OpenApiConfig {
                         .title("API - Sistema de Autenticação")
                         .description("API REST com Spring Boot, JWT e Swagger")
                         .version("1.0.0")
+                        .description("""
+                                API REST com Spring Boot, JWT e Swagger.
+                                
+                                ### 📌 Exemplo de script para Insomnia (pós-request)
+                                ```javascript
+                                const jsonData = insomnia.response.json();
+                                const token = jsonData.auth_token;
+                                
+                                if (token) {
+                                    insomnia.environment.set("bearerToken", token);
+                                }
+                                ```
+                                
+                                ### 📌 Exemplo de script para Postman (Tests)
+                                ```javascript
+                                const responseJson = pm.response.json();
+                                
+                                pm.test("Response status is 200 OK", function () {
+                                    pm.response.to.have.status(200);
+                                });
+                                
+                                if (responseJson.access_token) {
+                                    pm.environment.set("api_token", responseJson.access_token);
+                                    console.log("api_token set to: " + pm.environment.get("api_token"));
+                                }
+                                ```
+                                
+                                ### 🔐 Autenticação
+                                Header esperado nas requisições protegidas:
+                                ```
+                                Authorization: Bearer {{token}}
+                                ```
+                                """)
                 )
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
@@ -37,12 +70,52 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public OpenApiCustomizer sortOperations() {
-        return openApi -> openApi.getPaths().values().forEach(
-                pathItem -> pathItem.readOperations()
-                        .sort(Comparator.comparing(Operation::getOperationId))
+    public OpenApiCustomizer sortPathsByTag() {
+        return openApi -> {
+
+            if (openApi.getPaths() == null || openApi.getPaths().isEmpty()) {
+                return;
+            }
+
+            var sortedEntries = openApi.getPaths().entrySet()
+                    .stream()
+                    .sorted(Comparator.comparing(entry -> {
+                        var pathItem = entry.getValue();
+
+                        if (pathItem.readOperations() != null && !pathItem.readOperations().isEmpty()) {
+                            var operation = pathItem.readOperations().get(0);
+                            if (operation.getTags() != null && !operation.getTags().isEmpty()) {
+                                return operation.getTags().get(0);
+                            }
+                        }
+                        return "ZZZ";
+                    }))
+                    .toList();
+
+            var sortedPaths = new io.swagger.v3.oas.models.Paths();
+            sortedEntries.forEach(entry ->
+                    sortedPaths.put(entry.getKey(), entry.getValue())
+            );
+
+            openApi.setPaths(sortedPaths);
+        };
+    }
+
+    @Bean
+    public OpenApiCustomizer sortOperationsInsidePath() {
+        return openApi -> openApi.getPaths().values().forEach(pathItem ->
+                pathItem.readOperations().sort(
+                        Comparator
+                                .comparing(
+                                        (Operation op) -> op.getTags() != null && !op.getTags().isEmpty()
+                                                ? op.getTags().get(0)
+                                                : "ZZZ"
+                                )
+                                .thenComparing(op -> op.getOperationId() != null ? op.getOperationId() : "")
+                )
         );
     }
+
 
     @Bean
     public OpenApiCustomizer globalErrorResponsesCustomizer() {
@@ -88,5 +161,20 @@ public class OpenApiConfig {
                                 new ApiErrorResponse(message, status)
                         )
                 ));
+    }
+
+    private int extractTagOrder(Operation operation) {
+        if (operation.getTags() == null || operation.getTags().isEmpty()) {
+            return Integer.MAX_VALUE;
+        }
+
+        String tag = operation.getTags().get(0);
+
+        try {
+            String number = tag.split("-")[0].trim();
+            return Integer.parseInt(number);
+        } catch (Exception e) {
+            return Integer.MAX_VALUE;
+        }
     }
 }
