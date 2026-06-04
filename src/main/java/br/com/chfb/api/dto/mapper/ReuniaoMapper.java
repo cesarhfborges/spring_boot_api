@@ -19,5 +19,8 @@ public interface ReuniaoMapper {
     @Mapping(target = "pautas", ignore = true)
     @Mapping(target = "criadoPor", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "titulo", source = "titulo")
+    @Mapping(target = "descricao", source = "descricao")
+    @Mapping(target = "dataHoraInicio", source = "dataHoraInicio")
     Reuniao toEntity(ReuniaoRequest request);
 }

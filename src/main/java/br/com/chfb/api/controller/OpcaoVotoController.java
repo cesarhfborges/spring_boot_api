@@ -2,6 +2,7 @@ package br.com.chfb.api.controller;
 
 import br.com.chfb.api.dto.mapper.OpcaoVotoMapper;
 import br.com.chfb.api.dto.req.OpcaoVotoRequest;
+import br.com.chfb.api.dto.req.ReordenarOpcaoVotoRequest;
 import br.com.chfb.api.dto.resp.OpcaoVotoResponse;
 import br.com.chfb.api.security.annotation.PodeGerenciar;
 import br.com.chfb.api.service.OpcaoVotoService;
@@ -95,5 +96,19 @@ public class OpcaoVotoController {
             @PathVariable Long id
     ) {
         service.excluir(reuniaoId, pautaId, id);
+    }
+
+    @PutMapping("/reordenar")
+    @Operation(summary = "Reordenar opções de voto")
+    public void reordenar(
+            @PathVariable Long reuniaoId,
+            @PathVariable Long pautaId,
+            @RequestBody List<@Valid ReordenarOpcaoVotoRequest> opcoes
+    ) {
+        service.reordenar(
+                reuniaoId,
+                pautaId,
+                opcoes
+        );
     }
 }

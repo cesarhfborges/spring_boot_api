@@ -1,5 +1,6 @@
 package br.com.chfb.api.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +50,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleConstraintViolation(ConstraintViolationException ex) {
-
         List<String> errors = ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
@@ -62,9 +64,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleJsonParse(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getMostSpecificCause();
+
+        if (cause instanceof DateTimeParseException) {
+            return Map.of(
+                    "status", HttpStatus.BAD_REQUEST.value(),
+                    "message", "Formato de data inválido. Utilize yyyy-MM-dd."
+            );
+        }
+
         return Map.of(
                 "status", HttpStatus.BAD_REQUEST.value(),
-                "message", ex.getMessage()
+                "message", "JSON inválido."
         );
     }
 
@@ -98,7 +109,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-
         return Map.of(
                 "status", HttpStatus.CONFLICT.value(),
                 "message", "Já existe um item com esses dados."

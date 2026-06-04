@@ -26,6 +26,9 @@ public class Reuniao {
     @Column(nullable = false)
     private LocalDateTime dataHoraInicio;
 
+    @Column(nullable = true)
+    private LocalDateTime dataHoraFim;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "varchar(30) default 'AGENDADA'")
     private StatusReuniao status;

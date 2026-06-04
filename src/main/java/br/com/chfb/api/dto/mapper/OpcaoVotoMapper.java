@@ -18,5 +18,6 @@ public interface OpcaoVotoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "pauta", ignore = true)
     @Mapping(target = "titulo", source = "titulo")
+    @Mapping(target = "icone", source = "icone")
     OpcaoVoto toEntity(OpcaoVotoRequest request);
 }

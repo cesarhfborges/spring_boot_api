@@ -52,7 +52,7 @@ public class UsuarioSeed implements Seed {
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
 
         Usuario usuario = Usuario.builder()
-                .username("admin")
+                .username("admin@admin.com")
                 .password(passwordEncoder.encode("admin123"))
                 .roles(Set.of(adminRole))
                 .enabled(true)

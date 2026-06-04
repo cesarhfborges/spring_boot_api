@@ -10,6 +10,7 @@ public record PautaRequest(
         @NotBlank(message = "Título é obrigatório")
         String titulo,
 
+        @NotBlank(message = "Descrição é obrigatória")
         String descricao,
 
         @NotNull(message = "Tipo de voto é obrigatório")
@@ -17,7 +18,5 @@ public record PautaRequest(
 
         @PositiveOrZero(message = "Limite deve ser zero ou positivo")
         Integer limiteSelecoes
-//        @NotNull(message = "Deve ser informado se é exigido codigo ou não.")
-//        boolean exigeCodigoVoto
 ) {
 }

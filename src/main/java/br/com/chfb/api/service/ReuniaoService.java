@@ -25,6 +25,11 @@ public class ReuniaoService {
     }
 
     public Reuniao cadastrar(Reuniao reuniao) {
+        if (reuniao.getDataHoraFim() != null) {
+            throw new IllegalArgumentException(
+                    "Data/hora de fim não pode ser informada no cadastro"
+            );
+        }
         reuniao.setStatus(StatusReuniao.AGENDADA);
         reuniao.setCriadoPor(usuarioLogadoProvider.getUsuarioLogado());
         return repository.save(reuniao);
@@ -50,7 +55,11 @@ public class ReuniaoService {
         reuniao.setTitulo(reuniaoAtualizada.getTitulo());
         reuniao.setDescricao(reuniaoAtualizada.getDescricao());
         reuniao.setDataHoraInicio(reuniaoAtualizada.getDataHoraInicio());
-
+//        if (reuniaoAtualizada.getStatus().equals(StatusReuniao.ENCERRADA)) {
+//            reuniao.setDataHoraFim(reuniaoAtualizada.getDataHoraFim());
+//        } else {
+//            reuniao.setDataHoraFim(null);
+//        }
         return repository.save(reuniao);
     }
 }

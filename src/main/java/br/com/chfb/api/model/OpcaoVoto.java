@@ -24,6 +24,9 @@ public class OpcaoVoto {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
+    private String icone;
+
+    @Column(nullable = true)
     private Integer ordem;
 }

@@ -1,5 +1,6 @@
 package br.com.chfb.api.service;
 
+import br.com.chfb.api.dto.req.ReordenarOpcaoVotoRequest;
 import br.com.chfb.api.model.OpcaoVoto;
 import br.com.chfb.api.model.Pauta;
 import br.com.chfb.api.repository.OpcaoVotoRepository;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,8 +71,13 @@ public class OpcaoVotoService {
     ) {
         OpcaoVoto opcao = buscarPorId(reuniaoId, pautaId, id);
 
+        opcao.setTitulo(atualizada.getTitulo());
         opcao.setDescricao(atualizada.getDescricao());
-        opcao.setOrdem(atualizada.getOrdem());
+        opcao.setIcone(atualizada.getIcone());
+        if (atualizada.getOrdem() != null) {
+            opcao.setOrdem(atualizada.getOrdem());
+        }
+//        opcao.setOrdem(atualizada.getOrdem());
 
         return repository.save(opcao);
     }
@@ -88,5 +96,34 @@ public class OpcaoVotoService {
         if (!pautaRepository.existsByIdAndReuniaoId(pautaId, reuniaoId)) {
             throw new EntityNotFoundException("Pauta não encontrada para a reunião informada");
         }
+    }
+
+    @Transactional
+    public void reordenar(
+            Long reuniaoId,
+            Long pautaId,
+            List<ReordenarOpcaoVotoRequest> opcoes
+    ) {
+
+        validarPauta(reuniaoId, pautaId);
+
+        List<OpcaoVoto> existentes =
+                repository.findAllByPautaIdOrderByOrdemAsc(pautaId);
+
+        Map<Long, Integer> ordens = opcoes.stream()
+                .collect(Collectors.toMap(
+                        ReordenarOpcaoVotoRequest::id,
+                        ReordenarOpcaoVotoRequest::ordem
+                ));
+
+        existentes.forEach(opcao -> {
+            Integer novaOrdem = ordens.get(opcao.getId());
+
+            if (novaOrdem != null) {
+                opcao.setOrdem(novaOrdem);
+            }
+        });
+
+        repository.saveAll(existentes);
     }
 }
