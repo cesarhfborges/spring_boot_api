@@ -26,7 +26,7 @@ public class Reuniao {
     @Column(nullable = false)
     private LocalDateTime dataHoraInicio;
 
-    @Column(nullable = true)
+    @Column()
     private LocalDateTime dataHoraFim;
 
     @Enumerated(EnumType.STRING)

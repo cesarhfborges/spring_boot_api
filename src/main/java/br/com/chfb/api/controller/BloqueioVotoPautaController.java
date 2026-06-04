@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @PodeGerenciar
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "08 - Bloqueio", description = "")
+@Tag(name = "08 - Bloqueio", description = "Bloqueia usuarios de votarem nos itens")
 public class BloqueioVotoPautaController {
 
     private final BloqueioVotoPautaService service;
