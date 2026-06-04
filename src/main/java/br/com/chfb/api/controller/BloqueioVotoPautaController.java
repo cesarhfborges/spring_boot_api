@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,11 +91,12 @@ public class BloqueioVotoPautaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover bloqueio de voto")
-    public void excluir(
+    public ResponseEntity<Void> excluir(
             @PathVariable Long reuniaoId,
             @PathVariable Long pautaId,
             @PathVariable Long id
     ) {
         service.excluir(reuniaoId, pautaId, id);
+        return ResponseEntity.noContent().build();
     }
 }

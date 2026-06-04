@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,17 +91,18 @@ public class OpcaoVotoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir opção de voto")
-    public void excluir(
+    public ResponseEntity<Void> excluir(
             @PathVariable Long reuniaoId,
             @PathVariable Long pautaId,
             @PathVariable Long id
     ) {
         service.excluir(reuniaoId, pautaId, id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/reordenar")
     @Operation(summary = "Reordenar opções de voto")
-    public void reordenar(
+    public ResponseEntity<Void> reordenar(
             @PathVariable Long reuniaoId,
             @PathVariable Long pautaId,
             @RequestBody List<@Valid ReordenarOpcaoVotoRequest> opcoes
@@ -110,5 +112,6 @@ public class OpcaoVotoController {
                 pautaId,
                 opcoes
         );
+        return ResponseEntity.noContent().build();
     }
 }
