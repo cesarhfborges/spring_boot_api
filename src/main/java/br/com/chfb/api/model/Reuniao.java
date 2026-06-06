@@ -20,7 +20,7 @@ public class Reuniao {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
     @Column(nullable = false)

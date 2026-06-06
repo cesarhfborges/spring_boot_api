@@ -32,6 +32,7 @@ public class Pauta {
     @Column(nullable = false)
     private String titulo;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
     @Enumerated(EnumType.STRING)

@@ -5,6 +5,7 @@ public record OpcaoVotoResponse(
         String titulo,
         String descricao,
         String icone,
-        Integer ordem
+        Integer ordem,
+        String tipo
 ) {
 }

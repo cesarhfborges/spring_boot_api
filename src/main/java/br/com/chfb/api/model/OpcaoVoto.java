@@ -21,7 +21,7 @@ public class OpcaoVoto {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
     @Column()
@@ -29,4 +29,8 @@ public class OpcaoVoto {
 
     @Column()
     private Integer ordem;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoVotoRegistro tipo;
 }

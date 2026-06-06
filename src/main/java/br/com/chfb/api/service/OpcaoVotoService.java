@@ -3,6 +3,7 @@ package br.com.chfb.api.service;
 import br.com.chfb.api.dto.req.ReordenarOpcaoVotoRequest;
 import br.com.chfb.api.model.OpcaoVoto;
 import br.com.chfb.api.model.Pauta;
+import br.com.chfb.api.model.TipoVotoRegistro;
 import br.com.chfb.api.repository.OpcaoVotoRepository;
 import br.com.chfb.api.repository.PautaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -74,10 +75,10 @@ public class OpcaoVotoService {
         opcao.setTitulo(atualizada.getTitulo());
         opcao.setDescricao(atualizada.getDescricao());
         opcao.setIcone(atualizada.getIcone());
+        opcao.setTipo(atualizada.getTipo());
         if (atualizada.getOrdem() != null) {
             opcao.setOrdem(atualizada.getOrdem());
         }
-//        opcao.setOrdem(atualizada.getOrdem());
 
         return repository.save(opcao);
     }

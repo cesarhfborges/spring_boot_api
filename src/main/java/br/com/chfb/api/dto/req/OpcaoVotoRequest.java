@@ -1,7 +1,9 @@
 package br.com.chfb.api.dto.req;
 
+import br.com.chfb.api.model.TipoVotoRegistro;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
 public record OpcaoVotoRequest(
@@ -17,6 +19,9 @@ public record OpcaoVotoRequest(
 
         @Nullable
         @PositiveOrZero(message = "Ordem deve ser zero ou positiva")
-        Integer ordem
+        Integer ordem,
+
+        @NotNull(message = "Tipo é obrigatório")
+        TipoVotoRegistro tipo
 ) {
 }
