@@ -1,6 +1,7 @@
 package br.com.chfb.api.repository;
 
 import br.com.chfb.api.model.BloqueioVotoPauta;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface BloqueioVotoPautaRepository
     );
 
     List<BloqueioVotoPauta> findAllByPautaId(Long pautaId);
+
+    @EntityGraph(attributePaths = {"funcionario"})
+    List<BloqueioVotoPauta> findAllWithUsersByPautaId(Long pautaId);
 
     Optional<BloqueioVotoPauta> findByIdAndPautaId(Long id, Long pautaId);
 

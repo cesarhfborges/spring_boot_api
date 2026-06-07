@@ -20,25 +20,18 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    private final List<Tag> tags = List.of(new Tag().name("01 - Autenticação").description("Endpoints de login e logout"),
-
+    private final List<Tag> tags = List.of(
+            new Tag().name("01 - Autenticação").description("Endpoints de login e logout"),
             new Tag().name("02 - Perfil").description("Atualização de perfil"),
-
             new Tag().name("03 - Funcionario").description("CRUD de funcionarios do sistema"),
-
             new Tag().name("04 - Endereços").description("CRUD de endereços do sistema"),
-
             new Tag().name("05 - Contatos").description("CRUD de contatos do sistema"),
-
             new Tag().name("06 - Reuniao").description("Gestão de reuniões"),
-
             new Tag().name("07 - Pautas").description("Gestão de pautas da reunião"),
-
             new Tag().name("08 - Bloqueio").description("Bloqueio de voto por pauta"),
-
             new Tag().name("09 - Opções").description("Configuração de opções de voto"),
-
-            new Tag().name("10 - Votação").description("Registro de votos"));
+            new Tag().name("10 - Votação").description("Registro de votos")
+    );
 
     @Bean
     public OpenAPI customOpenAPI() {

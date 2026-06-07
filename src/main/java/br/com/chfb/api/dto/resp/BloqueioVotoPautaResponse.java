@@ -8,6 +8,8 @@ public record BloqueioVotoPautaResponse(
         Long pautaId,
         String motivo,
         LocalDateTime dataInclusao,
-        boolean ativo
+        boolean ativo,
+        FuncionarioBloqueadoResponse funcionario
 ) {
+    public record FuncionarioBloqueadoResponse(Long id, String nome, String sobrenome) {}
 }

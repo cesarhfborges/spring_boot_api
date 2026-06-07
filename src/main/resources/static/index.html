@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHFB API</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: #0d1117;
+            background-image: radial-gradient(circle at top right, rgba(13, 110, 253, 0.15), transparent 25%),
+            radial-gradient(circle at bottom left, rgba(25, 135, 84, 0.15), transparent 25%);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #198754;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #198754;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container hero">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+
+            <span class="badge text-bg-primary mb-3">
+                API REST
+            </span>
+
+            <h1 class="display-3 fw-bold mb-3">
+                CHFB API
+            </h1>
+
+            <p class="lead text-secondary mb-4">
+                Plataforma para gerenciamento de reuniões, pautas, votações e assembleias.
+            </p>
+
+            <div class="mb-5">
+                <span class="status-dot"></span>
+                <span class="text-success fw-semibold">
+                    Serviço Online
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
+                <a href="/swagger-ui/index.html"
+                   class="btn btn-primary btn-lg">
+                    Documentação Swagger
+                </a>
+
+                <a href="/v3/api-docs"
+                   class="btn btn-outline-light btn-lg">
+                    OpenAPI JSON
+                </a>
+            </div>
+
+            <div class="row g-4 text-start">
+
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                Reuniões
+                            </h5>
+                            <p class="card-text text-secondary">
+                                Gerenciamento completo de reuniões e assembleias.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                Pautas
+                            </h5>
+                            <p class="card-text text-secondary">
+                                Controle de pautas, opções e fluxo de votação.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                API REST
+                            </h5>
+                            <p class="card-text text-secondary">
+                                Integração simples através de endpoints documentados.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-5 text-secondary small">
+                © 2026 CHFB API
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
