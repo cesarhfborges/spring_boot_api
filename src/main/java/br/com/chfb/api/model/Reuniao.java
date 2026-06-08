@@ -30,7 +30,7 @@ public class Reuniao {
     private LocalDateTime dataHoraFim;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "varchar(30) default 'AGENDADA'")
+    @Column(nullable = false)
     private StatusReuniao status;
 
     @ManyToOne
