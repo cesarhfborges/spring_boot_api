@@ -14,7 +14,7 @@ services:
       - 'DB_PASSWORD=${SERVICE_PASSWORD_MYSQL}'
       - MYSQL_HOST=database
       - DB_TIMEZONE=${TIMEZONE:-America/Sao_Paulo}
-      - JWT_SECRET=${SERVICE_PASSWORD_APPLICATION}
+      - JWT_SECRET=${SERVICE_PASSWORD_64_APPLICATION}
       - EXPIRATION_TIME=${JWT_EXPIRATION_TIME:-3600000}
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://127.0.0.1:8080' ]
