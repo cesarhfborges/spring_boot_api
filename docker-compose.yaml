@@ -21,6 +21,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    labels:
+      - coolify.application.subType=service
     environment:
       - DB_NAME=${MYSQL_DATABASE:-appdb}
       - DB_USER=${SERVICE_USER_MYSQL}
@@ -33,6 +35,8 @@ services:
     image: mysql:8.4
     container_name: mysql
     restart: unless-stopped
+    labels:
+      - coolify.application.subType=database
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-appdb}
       - MYSQL_USER=${SERVICE_USER_MYSQL}
