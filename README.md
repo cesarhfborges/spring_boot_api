@@ -97,3 +97,17 @@ mvn test "-Dtest=NomeDaSuaClasseTest"
 ## 📊 Relatórios de Testes
 Após a execução dos testes, você pode conferir o relatório completo de sucessos e falhas abrindo o arquivo abaixo no seu navegador:
 * `target/surefire-reports/index.html`
+
+Por padrão, o Maven gera os relatórios estruturados em formato XML. Para compilar esses dados em uma página web (HTML) legível, execute:
+
+#### Usando o Maven global
+```bash
+mvn surefire-report:report "-Dspring.profiles.active=dev"
+```
+#### Ou usando o Wrapper do projeto (Windows PowerShell)
+```bash
+.\mvnw.cmd surefire-report:report "-Dspring.profiles.active=dev"
+```
+
+Após a execução, abra o relatório gerado em seu navegador de preferência:
+* `target/reports/surefire.html`

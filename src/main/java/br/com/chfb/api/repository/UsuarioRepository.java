@@ -11,12 +11,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByUsername(String username);
 
-
-    //    select distinct u
-//    from Usuario u
-//    join fetch u.roles
-//    join fetch u.perfil p
-//    where u.username = :username
     @Query("""
                 select distinct u
                 from Usuario u
