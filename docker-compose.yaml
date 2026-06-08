@@ -41,7 +41,7 @@ services:
       - 'MYSQL_PASSWORD=${SERVICE_PASSWORD_MYSQL}'
       - 'TIMEZONE=${TIMEZONE:-America/Sao_Paulo}'
     volumes:
-      - database:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
