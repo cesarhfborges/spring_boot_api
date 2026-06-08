@@ -35,7 +35,7 @@ services:
     image: mysql:8.4
     restart: unless-stopped
     environment:
-      - 'MYSQL_ROOT_PASSWORD=${SERVICE_PASSWORD_ROOT}'
+      - 'MYSQL_ROOT_PASSWORD=${SERVICE_PASSWORD_ROOT-MYSQL}'
       - 'MYSQL_DATABASE=${MYSQL_DATABASE:-votacao}'
       - 'MYSQL_USER=${SERVICE_USER_MYSQL}'
       - 'MYSQL_PASSWORD=${SERVICE_PASSWORD_MYSQL}'
