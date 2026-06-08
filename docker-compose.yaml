@@ -4,6 +4,8 @@ services:
     container_name: nginx
     restart: unless-stopped
     labels:
+      - coolify.managed=true
+      - coolify.type=service
       - coolify.application.subType=service
     environment:
       - SERVICE_URL_NGINX
@@ -22,8 +24,9 @@ services:
       database:
         condition: service_healthy
     labels:
-      - coolify.application.subType=service
       - coolify.managed=false
+      - coolify.type=service
+      - coolify.application.subType=service
     environment:
       - DB_NAME=${MYSQL_DATABASE:-appdb}
       - DB_USER=${SERVICE_USER_MYSQL-DATABASE}
