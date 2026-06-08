@@ -1,4 +1,4 @@
--- usuário
+-- Usuário administrador
 
 INSERT INTO usuarios (
     username,
@@ -6,19 +6,14 @@ INSERT INTO usuarios (
     enabled,
     account_confirmed
 )
-SELECT
-    'admin@admin.com',
-    '$2a$10$SEU_HASH_AQUI',
-    TRUE,
-    TRUE
-FROM dual
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM usuarios
-    WHERE username = 'admin@admin.com'
-);
+VALUES (
+           'admin@admin.com',
+           '$2a$10$JdAHDvDfqerxmc/t82/dRuQuhwL1DrZK.wW3HUFFfuk..8zo.l14W',
+           TRUE,
+           TRUE
+       );
 
--- vincula role admin
+-- Perfil administrador
 
 INSERT INTO usuarios_roles (
     usuario_id,
@@ -28,17 +23,10 @@ SELECT
     u.id,
     r.id
 FROM usuarios u
-         JOIN roles r
-              ON r.name = 'ROLE_ADMIN'
-WHERE u.username = 'admin@admin.com'
-  AND NOT EXISTS (
-    SELECT 1
-    FROM usuarios_roles ur
-    WHERE ur.usuario_id = u.id
-      AND ur.role_id = r.id
-);
+         JOIN roles r ON r.name = 'ROLE_ADMIN'
+WHERE u.username = 'admin@admin.com';
 
--- funcionário
+-- Funcionário administrador
 
 INSERT INTO funcionarios (
     nome,
@@ -54,14 +42,9 @@ SELECT
     '000000000',
     u.id
 FROM usuarios u
-WHERE u.username = 'admin@admin.com'
-  AND NOT EXISTS (
-    SELECT 1
-    FROM funcionarios f
-    WHERE f.user_id = u.id
-);
+WHERE u.username = 'admin@admin.com';
 
--- contato
+-- Contato administrador
 
 INSERT INTO contatos (
     tipo,
@@ -73,13 +56,5 @@ SELECT
     'admin@sistema.com',
     f.id
 FROM funcionarios f
-         JOIN usuarios u
-              ON u.id = f.user_id
-WHERE u.username = 'admin@admin.com'
-  AND NOT EXISTS (
-    SELECT 1
-    FROM contatos c
-    WHERE c.funcionario_id = f.id
-      AND c.tipo = 'EMAIL'
-      AND c.valor = 'admin@sistema.com'
-);
+         JOIN usuarios u ON u.id = f.user_id
+WHERE u.username = 'admin@admin.com';

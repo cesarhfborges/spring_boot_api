@@ -1,4 +1,4 @@
-FROM maven:3.9.11-eclipse-temurin-21 AS builder
+FROM maven:3.9.11-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN ./mvnw clean package -DskipTests
 # ==========================
 # Runtime
 # ==========================
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:17-jre
 
 RUN apt-get update && \
     apt-get install -y curl && \

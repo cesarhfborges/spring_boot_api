@@ -17,16 +17,21 @@ spring:
       auto-commit: true
   jpa:
     open-in-view: false
+    show-sql: true
     hibernate:
       ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: false
-        show_sql: true
-        connection:
-          isolation: 2
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQLDialect
+#        format_sql: false
+#        show_sql: true
+#        connection:
+#          isolation: 2
 server:
   servlet:
     #    context-path: /api
@@ -39,7 +44,6 @@ api:
   security:
     token:
       secret: YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=
-      #      secret: ${JWT_SECRET:YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=}
       expiration-time: 3600000
 
 springdoc:
