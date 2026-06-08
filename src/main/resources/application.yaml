@@ -3,9 +3,9 @@ spring:
     name: api
     version: 1.0.0
   datasource:
-    url: jdbc:mysql://database:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=${TIMEZONE}
-    username: ${SERVICE_USER_MYSQL}
-    password: ${SERVICE_PASSWORD_MYSQL}
+    url: jdbc:mysql://database:3306/${DB_NAME:appdb}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=${DB_TIMEZONE:America/Sao_Paulo}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       pool-name: HikariPool-1
@@ -42,9 +42,8 @@ server:
 api:
   security:
     token:
-      secret: YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=
-      #      secret: ${JWT_SECRET:YXJvbWFkb2NvZGlzb3JlY2Vpc2RlYXBpc3ByaW5nYm9vdGNvbWp3dGlzYmVzdGNoYXJzZXQ=}
-      expiration-time: 3600000
+      secret: ${JWT_SECRET}
+      expiration-time: ${EXPIRATION_TIME:3600000}
 
 springdoc:
   swagger-ui:
