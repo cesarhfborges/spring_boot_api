@@ -23,6 +23,7 @@ services:
         condition: service_healthy
     labels:
       - coolify.application.subType=service
+      - coolify.managed=false
     environment:
       - DB_NAME=${MYSQL_DATABASE:-appdb}
       - DB_USER=${SERVICE_USER_MYSQL}
