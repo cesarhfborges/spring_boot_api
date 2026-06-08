@@ -24,6 +24,7 @@ services:
       database:
         condition: service_healthy
     labels:
+      - coolify.proxy=false
       - coolify.managed=false
       - coolify.type=service
       - coolify.application.subType=service
