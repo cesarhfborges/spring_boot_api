@@ -17,6 +17,7 @@ import java.util.List;
 public class DatabaseSeedRunner implements ApplicationRunner {
 
     private final ApplicationContext applicationContext;
+
     private final List<Class<? extends Seed>> seedOrder = List.of(
             RoleSeed.class,
             UsuarioSeed.class,
@@ -25,9 +26,9 @@ public class DatabaseSeedRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        for (Class<? extends Seed> seedClass : seedOrder) {
-            Seed seed = applicationContext.getBean(seedClass);
-            seed.run();
-        }
+//        for (Class<? extends Seed> seedClass : seedOrder) {
+//            Seed seed = applicationContext.getBean(seedClass);
+//            seed.run();
+//        }
     }
 }
