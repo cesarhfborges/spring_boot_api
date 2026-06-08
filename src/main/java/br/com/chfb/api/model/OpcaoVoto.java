@@ -21,7 +21,7 @@ public class OpcaoVoto {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
     @Column()
