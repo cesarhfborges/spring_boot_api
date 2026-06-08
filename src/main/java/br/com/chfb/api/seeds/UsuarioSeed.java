@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.Set;
 
 @Component
-@Profile("dev")
+//@Profile("dev")
 @RequiredArgsConstructor
 public class UsuarioSeed implements Seed {
 
