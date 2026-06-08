@@ -18,7 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: svo-app
+    container_name: votacao
     restart: unless-stopped
     depends_on:
       database:
