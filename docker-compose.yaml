@@ -8,17 +8,17 @@ services:
       - coolify.type=service
       - coolify.application.subType=service
     environment:
-      - SERVICE_URL_NGINX_80
+      - SERVICE_URL_SVO-APP_80
     depends_on:
-      - application
+      - svo-app
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
 
-  application:
+  SVO-APP:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring-app
+    container_name: svo-app
     restart: unless-stopped
     depends_on:
       database:
