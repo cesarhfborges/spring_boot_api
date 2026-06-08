@@ -6,7 +6,7 @@ services:
     labels:
       - coolify.application.subType=service
     environment:
-      - SERVICE_FQDN_NGINX
+      - SERVICE_URL_NGINX
     depends_on:
       - application
     volumes:
