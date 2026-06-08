@@ -11,9 +11,9 @@ spring:
       pool-name: HikariPool-1
       minimum-idle: 5
       maximum-pool-size: 10
-      idle-timeout: 300000        # 5 minutos
-      max-lifetime: 1800000       # 30 minutos
-      connection-timeout: 30000   # 30 segundos
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 30000
       auto-commit: true
   jpa:
     open-in-view: false
@@ -33,7 +33,6 @@ spring:
 
 server:
   servlet:
-    #    context-path: /api
     encoding:
       charset: UTF-8
   port: 8080
