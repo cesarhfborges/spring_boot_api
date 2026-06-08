@@ -2,6 +2,8 @@ spring:
   application:
     name: api
     version: 1.0.0
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
   datasource:
     url: jdbc:mysql://localhost:3306/api_spring
     username: cesar
@@ -20,25 +22,41 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        connection:
+          isolation: 2
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: true
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
-#        format_sql: false
-#        show_sql: true
-#        connection:
-#          isolation: 2
+  sql:
+    init:
+      mode: never
 server:
+  shutdown: immediate
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types:
+      - application/json
+      - application/xml
+      - text/html
+      - text/plain
   servlet:
-    #    context-path: /api
     encoding:
       charset: UTF-8
+      enabled: true
+      force: true
   port: 8080
   address: 0.0.0.0
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
 
 app:
   cors:
@@ -51,6 +69,21 @@ api:
       expiration-time: 3600000
 
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
+    enabled: true
     defaultModelsExpandDepth: -1
     path: /swagger-ui
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never

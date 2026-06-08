@@ -17,6 +17,8 @@ services:
       - JWT_SECRET=${SERVICE_PASSWORD_64_APPLICATION}
       - EXPIRATION_TIME=${JWT_EXPIRATION_TIME:-3600000}
       - APP_CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:?}
+      - 'JAVA_TOOL_OPTIONS=-Duser.timezone=${TIMEZONE:America/Sao_Paulo}'
+      - 'TZ=${TIMEZONE:America/Sao_Paulo}'
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://127.0.0.1:8080' ]
       interval: 5s
