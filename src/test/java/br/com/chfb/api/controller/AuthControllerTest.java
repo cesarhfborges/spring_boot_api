@@ -74,11 +74,11 @@ class AuthControllerTest {
         when(jwtService.generateToken("admin")).thenReturn("token_gerado_jwt");
         when(jwtService.getExpirationDateTime()).thenReturn(dataExpiracaoMock);
 
-        mockMvc.perform(post("/api/auth/login")
+        mockMvc.perform(
+                post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print()) // Imprime o JSON no console
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isOk());
     }
 
     @Test
