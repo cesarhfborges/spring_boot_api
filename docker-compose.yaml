@@ -42,7 +42,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-appdb}
       - MYSQL_USER=${SERVICE_USER_MYSQL}
       - MYSQL_PASSWORD=${SERVICE_PASSWORD_MYSQL}
-      - MYSQL_ROOT_PASSWORD=${SERVICE_PASSWORD_ROOT_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${SERVICE_PASSWORD_64_ROOT-DATABASE}
       - TIMEZONE=${TIMEZONE:-America/Sao_Paulo}
     command:
       - --default-authentication-plugin=mysql_native_password
