@@ -7,7 +7,7 @@ CREATE TABLE pautas
     descricao              TEXT,
 
     tipo_voto              enum ('UNICO', 'MULTIPLO')                              NOT NULL DEFAULT 'UNICO',
-    tipoVotacao            enum (
+    tipo_votacao            enum (
         'MAIORIA_SIMPLES',
         'MAIORIA_ABSOLUTA',
         'MAIORIA_QUALIFICADA_PRESENTES',
