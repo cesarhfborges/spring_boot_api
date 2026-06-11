@@ -4,6 +4,9 @@ import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 
 public record AbrirVotacaoRequest(
+        @NotNull(message = "Informe o tempo")
+        String tempo,
+
         @NotNull(message = "Informe se a votação exigirá código")
         Boolean exigeCodigoVoto,
 

@@ -183,6 +183,12 @@ public class VotoService {
             pauta.setCodigoVoto(null);
         }
 
+        if (!request.tempo().isEmpty()) {
+            pauta.setTempo(request.tempo());
+        } else {
+            pauta.setTempo(null);
+        }
+
         /* =========================
          * Abrir votação
          * ========================= */

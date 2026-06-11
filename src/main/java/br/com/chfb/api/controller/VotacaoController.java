@@ -67,7 +67,7 @@ public class VotacaoController {
     }
 
     @PostMapping("/cancelar")
-    @Operation(summary = "Encerrar votação da pauta")
+    @Operation(summary = "Cancelar votação da pauta")
     public void cancelarVotacao(
             @PathVariable Long reuniaoId,
             @PathVariable Long pautaId

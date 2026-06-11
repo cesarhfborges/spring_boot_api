@@ -13,6 +13,7 @@ public record PautaResponse(
         Integer limiteSelecoes,
         boolean exigeCodigoVoto,
         String codigoVoto,
+        String tempo,
         LocalDateTime dataHoraAbertura,
         LocalDateTime dataHoraEncerramento,
         StatusPauta status,

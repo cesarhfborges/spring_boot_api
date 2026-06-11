@@ -39,16 +39,27 @@ public class Pauta {
     @Column(nullable = false)
     private TipoVoto tipoVoto;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoVotacao tipoVotacao;
+
+    @Column()
     private Integer limiteSelecoes;
 
     @Column(nullable = false)
     private boolean exigeCodigoVoto = false;
 
+    @Column()
     private String codigoVoto;
 
+    @Column()
     private LocalDateTime dataHoraAbertura;
 
+    @Column()
     private LocalDateTime dataHoraEncerramento;
+
+    @Column()
+    private String tempo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -64,10 +75,6 @@ public class Pauta {
     protected void prePersist() {
         if (status == null) {
             status = StatusPauta.AGUARDANDO;
-        }
-
-        if (codigoVoto == null) {
-            codigoVoto = "";
         }
     }
 }

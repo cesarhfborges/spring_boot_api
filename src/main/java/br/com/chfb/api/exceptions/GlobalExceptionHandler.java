@@ -3,6 +3,7 @@ package br.com.chfb.api.exceptions;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,35 @@ import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+//    private final LogRepository repository;
+//
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<?> handle(
+//            Exception ex
+//    ) {
+//
+//        Log log = new Log();
+//
+//        log.setNivel(NivelLog.ERROR);
+//
+//        log.setOrigem(
+//                ex.getClass().getSimpleName()
+//        );
+//
+//        log.setMensagem(
+//                ExceptionUtils.getStackTrace(ex)
+//        );
+//
+//        repository.save(log);
+//
+//        return ResponseEntity
+//                .internalServerError()
+//                .build();
+//    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
