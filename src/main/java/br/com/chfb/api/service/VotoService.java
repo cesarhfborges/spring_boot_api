@@ -86,7 +86,7 @@ public class VotoService {
         /* =========================
          * 5. Código de voto
          * ========================= */
-        if (pauta.isExigeCodigoVoto()) {
+        if (pauta.getExigeCodigoVoto()) {
 
             if (codigoVoto == null || codigoVoto.isBlank()) {
                 throw new IllegalStateException("Código de voto é obrigatório para esta pauta");
@@ -177,17 +177,11 @@ public class VotoService {
 
             pauta.setCodigoVoto(codigo);
 
-            // 👉 opcional: logar ou retornar o código ao admin
-            // logger.info("Código de votação gerado: {}", codigo);
         } else {
             pauta.setCodigoVoto(null);
         }
 
-        if (!request.tempo().isEmpty()) {
-            pauta.setTempo(request.tempo());
-        } else {
-            pauta.setTempo(null);
-        }
+        pauta.setTempo(request.tempo());
 
         /* =========================
          * Abrir votação

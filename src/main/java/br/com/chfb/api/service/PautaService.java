@@ -74,7 +74,7 @@ public class PautaService {
         pauta.setDescricao(value.getDescricao());
         pauta.setTipoVoto(value.getTipoVoto());
         pauta.setLimiteSelecoes(value.getLimiteSelecoes());
-        pauta.setExigeCodigoVoto(value.isExigeCodigoVoto());
+        pauta.setExigeCodigoVoto(value.getExigeCodigoVoto());
         //pauta.setOrdem(value.getOrdem());
 
         return pautaRepository.save(pauta);

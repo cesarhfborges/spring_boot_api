@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,8 +26,8 @@ public class Pauta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "reuniao_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "reuniao_id", nullable = false)
     private Reuniao reuniao;
 
     @Column(nullable = false)
@@ -36,18 +37,18 @@ public class Pauta {
     private String descricao;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "tipo_voto", nullable = false)
     private TipoVoto tipoVoto;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "tipo_votacao", nullable = false)
     private TipoVotacao tipoVotacao;
 
     @Column()
     private Integer limiteSelecoes;
 
     @Column(nullable = false)
-    private boolean exigeCodigoVoto = false;
+    private Boolean exigeCodigoVoto = false;
 
     @Column()
     private String codigoVoto;
@@ -68,8 +69,8 @@ public class Pauta {
     @Column(nullable = false)
     private Integer ordem;
 
-    @OneToMany(mappedBy = "pauta")
-    private List<OpcaoVoto> opcoes;
+    @OneToMany(mappedBy = "pauta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OpcaoVoto> opcoes = new ArrayList<>();
 
     @PrePersist
     protected void prePersist() {
