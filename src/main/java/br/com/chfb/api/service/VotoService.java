@@ -1,6 +1,7 @@
 package br.com.chfb.api.service;
 
 import br.com.chfb.api.dto.req.AbrirVotacaoRequest;
+import br.com.chfb.api.dto.resp.EventoReuniao;
 import br.com.chfb.api.model.*;
 import br.com.chfb.api.repository.OpcaoVotoRepository;
 import br.com.chfb.api.repository.PautaRepository;
@@ -25,6 +26,7 @@ public class VotoService {
     private final OpcaoVotoRepository opcaoVotoRepository;
     private final BloqueioVotoPautaService bloqueioVotoPautaService;
     private final UsuarioLogadoProvider usuarioLogadoProvider;
+    private final EventoPublisher eventoPublisher;
 
     @Transactional
     public Voto salvar(
@@ -189,6 +191,15 @@ public class VotoService {
         pauta.setStatus(StatusPauta.ABERTA);
         pauta.setDataHoraAbertura(LocalDateTime.now());
 
+        eventoPublisher.publicar(
+                new EventoReuniao(
+                        "VOTACAO_ABERTA",
+                        pauta.getReuniao().getId(),
+                        pautaId,
+                        "Votação aberta"
+                )
+        );
+
         return pautaRepository.save(pauta);
     }
 
@@ -209,6 +220,15 @@ public class VotoService {
         pauta.setDataHoraEncerramento(LocalDateTime.now());
 
         pautaRepository.save(pauta);
+
+        eventoPublisher.publicar(
+                new EventoReuniao(
+                        "VOTACAO_ENCERRADA",
+                        pauta.getReuniao().getId(),
+                        pautaId,
+                        "Votação encerrada"
+                )
+        );
     }
 
     @Transactional

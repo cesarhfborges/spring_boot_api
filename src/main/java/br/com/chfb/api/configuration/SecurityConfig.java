@@ -1,5 +1,7 @@
-package br.com.chfb.api.security;
+package br.com.chfb.api.configuration;
 
+import br.com.chfb.api.security.JwtAuthenticationEntryPoint;
+import br.com.chfb.api.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
+                                "/ws",
+                                "/ws/**",
                                 "/index.html",
                                 "/static/**",
                                 "/api/auth/login",
