@@ -21,6 +21,7 @@ public interface PautaMapper {
     @Mapping(target = "titulo", source = "titulo")
     @Mapping(target = "descricao", source = "descricao")
     @Mapping(target = "tipoVoto", source = "tipoVoto")
+    @Mapping(target = "tipoVotacao", source = "tipoVotacao")
     @Mapping(target = "limiteSelecoes", source = "limiteSelecoes")
     Pauta toEntity(PautaRequest request);
 }
