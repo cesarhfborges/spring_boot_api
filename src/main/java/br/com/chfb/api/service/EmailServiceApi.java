@@ -24,23 +24,6 @@ public class EmailServiceApi {
         this.restClient = RestClient.create();
     }
 
-    public void enviarLinkRedefinicao(String paraEmail, String token) {
-        String urlRedefinicao = "https://seuapp.chfb.com.br/redefinir?token=" + token;
-
-        var de = new MailpitPayload.From("nao-responda@chfb.com.br", "CHFB Sistemas");
-        var para = new MailpitPayload.To(paraEmail, "");
-
-        var payload = getPayload(urlRedefinicao, de, para);
-
-        this.restClient.post()
-                .uri(mailpitUrl)
-                .header("Authorization", authHeader)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(payload)
-                .retrieve()
-                .toBodilessEntity();
-    }
-
     private static @NonNull MailpitPayload getPayload(String urlRedefinicao, MailpitPayload.From de, MailpitPayload.To para) {
         String corpoHtml = String.format(
                 "<div style='font-family: Arial; font-size: 16px;'>" +
@@ -60,5 +43,22 @@ public class EmailServiceApi {
                 List.of(),
                 Map.of("X-IP", "1.2.3.4")
         );
+    }
+
+    public void enviarLinkRedefinicao(String paraEmail, String token) {
+        String urlRedefinicao = "https://seuapp.chfb.com.br/redefinir?token=" + token;
+
+        var de = new MailpitPayload.From("nao-responda@chfb.com.br", "CHFB Sistemas");
+        var para = new MailpitPayload.To(paraEmail, "");
+
+        var payload = getPayload(urlRedefinicao, de, para);
+
+        this.restClient.post()
+                .uri(mailpitUrl)
+                .header("Authorization", authHeader)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(payload)
+                .retrieve()
+                .toBodilessEntity();
     }
 }
