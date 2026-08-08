@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/index.html",
                                 "/static/**",
                                 "/api/auth/login",
+                                "/api/auth/recuperar-senha",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

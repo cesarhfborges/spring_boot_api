@@ -7,10 +7,16 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
+import io.swagger.v3.oas.models.servers.ServerVariables;
 import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +38,8 @@ public class OpenApiConfig {
             new Tag().name("09 - Opções").description("Configuração de opções de voto"),
             new Tag().name("10 - Votação").description("Registro de votos")
     );
+    @Value("${app.url}")
+    private String appUrl;
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -39,7 +47,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("API - Sistema de Autenticação")
                         .description("API REST com Spring Boot, JWT e Swagger")
-                        .version("1.0.0")
+                        .version("1.0.0-RC-1")
                         .description("""
                                 API REST com Spring Boot, JWT e Swagger.
                                 
@@ -74,6 +82,26 @@ public class OpenApiConfig {
                                 ```
                                 """)
                 ).tags(this.tags)
+                .servers(List.of(
+                        new Server()
+                                .url(appUrl)
+                                .description("API URL")
+                                .variables(
+                                        new ServerVariables()
+                                                .addServerVariable(
+                                                        "baseUrl",
+                                                        new ServerVariable()
+                                                                ._default(appUrl)
+                                                                .description("URL base da API")
+                                                )
+                                                .addServerVariable(
+                                                        "bearerToken",
+                                                        new ServerVariable()
+                                                                ._default("")
+                                                                .description("Bearer token")
+                                                )
+                                )
+                ))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
@@ -84,52 +112,39 @@ public class OpenApiConfig {
                 );
     }
 
-//    @Bean
-//    public OpenApiCustomizer sortPathsByTag() {
-//        return openApi -> {
-//
-//            if (openApi.getPaths() == null || openApi.getPaths().isEmpty()) {
-//                return;
-//            }
-//
-//            var sortedEntries = openApi.getPaths().entrySet()
-//                    .stream()
-//                    .sorted(Comparator.comparing(entry -> {
-//                        var pathItem = entry.getValue();
-//
-//                        if (pathItem.readOperations() != null && !pathItem.readOperations().isEmpty()) {
-//                            var operation = pathItem.readOperations().get(0);
-//                            if (operation.getTags() != null && !operation.getTags().isEmpty()) {
-//                                return operation.getTags().get(0);
-//                            }
-//                        }
-//                        return "ZZZ";
-//                    }))
-//                    .toList();
-//
-//            var sortedPaths = new io.swagger.v3.oas.models.Paths();
-//            sortedEntries.forEach(entry ->
-//                    sortedPaths.put(entry.getKey(), entry.getValue())
-//            );
-//
-//            openApi.setPaths(sortedPaths);
-//        };
-//    }
+    @Bean
+    public OpenApiCustomizer globalHeadersCustomizer() {
+        return openApi -> openApi.getPaths().values().forEach(pathItem ->
+                pathItem.readOperations().forEach(operation -> {
 
-//    @Bean
-//    public OpenApiCustomizer sortOperationsInsidePath() {
-//        return openApi -> openApi.getPaths().values().forEach(pathItem ->
-//                pathItem.readOperations().sort(
-//                        Comparator
-//                                .comparing(
-//                                        (Operation op) -> op.getTags() != null && !op.getTags().isEmpty()
-//                                                ? op.getTags().get(0)
-//                                                : "ZZZ"
-//                                )
-//                                .thenComparing(op -> op.getOperationId() != null ? op.getOperationId() : "")
-//                )
-//        );
-//    }
+                    if (operation.getParameters() == null) {
+                        operation.setParameters(new java.util.ArrayList<>());
+                    }
+
+                    operation.getParameters().add(
+                            new Parameter()
+                                    .in("header")
+                                    .name("Accept")
+                                    .description("Tipo de conteúdo aceito")
+                                    .required(false)
+                                    .schema(new Schema<String>()
+                                            .type("string")
+                                            .example("application/json"))
+                    );
+
+                    operation.getParameters().add(
+                            new Parameter()
+                                    .in("header")
+                                    .name("Content-Type")
+                                    .description("Tipo de conteúdo enviado")
+                                    .required(false)
+                                    .schema(new Schema<String>()
+                                            .type("string")
+                                            .example("application/json"))
+                    );
+                })
+        );
+    }
 
     @Bean
     public OpenApiCustomizer sortByTagOrder() {
@@ -229,4 +244,51 @@ public class OpenApiConfig {
             return Integer.MAX_VALUE;
         }
     }
+
+    //    @Bean
+//    public OpenApiCustomizer sortPathsByTag() {
+//        return openApi -> {
+//
+//            if (openApi.getPaths() == null || openApi.getPaths().isEmpty()) {
+//                return;
+//            }
+//
+//            var sortedEntries = openApi.getPaths().entrySet()
+//                    .stream()
+//                    .sorted(Comparator.comparing(entry -> {
+//                        var pathItem = entry.getValue();
+//
+//                        if (pathItem.readOperations() != null && !pathItem.readOperations().isEmpty()) {
+//                            var operation = pathItem.readOperations().get(0);
+//                            if (operation.getTags() != null && !operation.getTags().isEmpty()) {
+//                                return operation.getTags().get(0);
+//                            }
+//                        }
+//                        return "ZZZ";
+//                    }))
+//                    .toList();
+//
+//            var sortedPaths = new io.swagger.v3.oas.models.Paths();
+//            sortedEntries.forEach(entry ->
+//                    sortedPaths.put(entry.getKey(), entry.getValue())
+//            );
+//
+//            openApi.setPaths(sortedPaths);
+//        };
+//    }
+
+//    @Bean
+//    public OpenApiCustomizer sortOperationsInsidePath() {
+//        return openApi -> openApi.getPaths().values().forEach(pathItem ->
+//                pathItem.readOperations().sort(
+//                        Comparator
+//                                .comparing(
+//                                        (Operation op) -> op.getTags() != null && !op.getTags().isEmpty()
+//                                                ? op.getTags().get(0)
+//                                                : "ZZZ"
+//                                )
+//                                .thenComparing(op -> op.getOperationId() != null ? op.getOperationId() : "")
+//                )
+//        );
+//    }
 }
