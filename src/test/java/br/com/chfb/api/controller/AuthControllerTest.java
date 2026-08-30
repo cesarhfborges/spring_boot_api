@@ -36,9 +36,11 @@ class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Substituído @MockBean por @MockitoBean
     @MockitoBean
     private UsuarioRepository repository;
+
+    @MockitoBean
+    private br.com.chfb.api.service.EmailServiceApi emailService;
 
     @MockitoBean
     private PasswordEncoder encoder;
