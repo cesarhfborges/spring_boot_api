@@ -24,7 +24,11 @@ public class EmailServiceApi {
         this.restClient = RestClient.create();
     }
 
-    private static @NonNull MailpitPayload getPayload(String urlRedefinicao, MailpitPayload.From de, MailpitPayload.To para) {
+    private static @NonNull MailpitPayload getPayload(
+            String urlRedefinicao,
+            MailpitPayload.From de,
+            MailpitPayload.To para
+    ) {
         String corpoHtml = String.format(
                 "<div style='font-family: Arial; font-size: 16px;'>" +
                         "<h2>Recuperação de Senha</h2>" +
