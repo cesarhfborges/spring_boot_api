@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         return Map.of(
                 "status", HttpStatus.CONFLICT.value(),
-                "message", "Já existe um item com esses dados."
+                "message", ex.getCause().getCause().getLocalizedMessage() // "Já existe um item com esses dados."
         );
     }
 

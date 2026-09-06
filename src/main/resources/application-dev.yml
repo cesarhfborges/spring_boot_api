@@ -33,6 +33,7 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: true
+    clean-disabled: false
   sql:
     init:
       mode: never
@@ -47,7 +48,10 @@ spring:
 #          auth: false
 #          starttls:
 #            enable: false
-
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 server:
   shutdown: immediate
@@ -72,6 +76,8 @@ server:
     include-binding-errors: never
 
 app:
+  upload:
+    dir: "uploads/images"
   url: "http://localhost:8080"
   cors:
     allowed-origins: http://localhost:3000,http://localhost:8081,http://localhost:4200,http://192.168.1.100:8081,http://192.168.3.23:4200
@@ -101,3 +107,6 @@ management:
       probes:
         enabled: true
       show-details: never
+  health:
+    mail:
+      enabled: false
